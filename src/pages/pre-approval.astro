@@ -1,0 +1,648 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SITUATIONS } from '../data/situations';
+---
+
+<Layout
+  title="Get Pre-Approved for a Car Loan in BC | Bad Credit & Newcomers Welcome | Kirk Auto"
+  description="2-minute soft pre-approval for car loans in British Columbia. No impact to your credit score. Zero judgment. Kirk finds realistic bank options tailored to your income."
+>
+  <div class="preapp-page container">
+    <div class="preapp-header text-center">
+      <span class="badge-amber">Fast & Confidential</span>
+      <h1 class="page-title font-heading">Get Pre-Approved in 2 Minutes</h1>
+      <p class="page-subtitle">
+        Find out exactly what you qualify for before shopping. Applying online does not initiate a hard credit pull. Kirk reviews every application personally.
+      </p>
+    </div>
+
+    <!-- Multi-Step Form Wrapper -->
+    <div class="form-wrapper card">
+      <!-- Progress Bar -->
+      <div class="progress-bar-container">
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill" style="width: 25%;"></div>
+        </div>
+        <div class="step-indicator" id="step-indicator">Step 1 of 4: Your Credit Situation</div>
+      </div>
+
+      <form id="pre-approval-form" class="preapp-form" onsubmit="event.preventDefault();">
+        <!-- Step 1: Situation -->
+        <fieldset class="form-step active" id="step-1">
+          <legend class="step-legend font-heading">What best describes your current situation?</legend>
+          <p class="step-instruction">Pick the option closest to your circumstances so Kirk targets the right lenders.</p>
+
+          <div class="card-options-grid">
+            {SITUATIONS.map((sit, i) => (
+              <label class:list={['option-card', { selected: i === 0 }]}>
+                <input
+                  type="radio"
+                  name="situation"
+                  value={sit.id}
+                  checked={i === 0}
+                  class="sr-only"
+                />
+                <div class="card-radio-mark"></div>
+                <div class="card-text">
+                  <strong class="card-title">{sit.label}</strong>
+                  <span class="card-desc">{sit.description}</span>
+                </div>
+              </label>
+            ))}
+          </div>
+
+          <div class="step-nav-footer">
+            <div></div>
+            <button type="button" class="btn btn-primary btn-lg next-btn" data-next="2">
+              Continue to Vehicle & Budget →
+            </button>
+          </div>
+        </fieldset>
+
+        <!-- Step 2: Vehicle & Budget -->
+        <fieldset class="form-step" id="step-2" style="display: none;">
+          <legend class="step-legend font-heading">What type of vehicle and payment fit your budget?</legend>
+          <p class="step-instruction">We match you with vehicles you actually want to drive.</p>
+
+          <div class="budget-section">
+            <label class="form-label">Preferred Vehicle Body Style:</label>
+            <div class="body-choice-grid">
+              <label class="body-card selected">
+                <input type="radio" name="vehicle_type" value="car" checked class="sr-only" />
+                <span class="body-name">Car / Small SUV</span>
+                <span class="body-range">~$15k–$20k</span>
+              </label>
+              <label class="body-card">
+                <input type="radio" name="vehicle_type" value="suv" class="sr-only" />
+                <span class="body-name">SUV / Crossover</span>
+                <span class="body-range">~$19k–$25k</span>
+              </label>
+              <label class="body-card">
+                <input type="radio" name="vehicle_type" value="truck" class="sr-only" />
+                <span class="body-name">Pickup Truck (4x4)</span>
+                <span class="body-range">~$22k–$28k</span>
+              </label>
+              <label class="body-card">
+                <input type="radio" name="vehicle_type" value="van" class="sr-only" />
+                <span class="body-name">Van / Minivan</span>
+                <span class="body-range">~$16k–$22k</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="budget-section" style="margin-top: 20px;">
+            <label class="form-label" for="payment-budget">Target Payment Every Two Weeks:</label>
+            <select id="payment-budget" name="target_payment" class="form-select">
+              <option value="150-200">$150 – $200 every two weeks</option>
+              <option value="200-250" selected>$200 – $250 every two weeks</option>
+              <option value="250-300">$250 – $300 every two weeks</option>
+              <option value="300-plus">$300+ every two weeks</option>
+              <option value="unsure">Not sure, whatever gets approved</option>
+            </select>
+          </div>
+
+          <div class="budget-section" style="margin-top: 20px;">
+            <label class="form-label" for="down-payment">Estimated Down Payment (Optional):</label>
+            <select id="down-payment" name="down_payment" class="form-select">
+              <option value="0" selected>$0 Down (Most popular)</option>
+              <option value="500">$500 Down</option>
+              <option value="1000">$1,000 Down</option>
+              <option value="2500">$2,500+ Down</option>
+              <option value="trade">I have a car to trade in</option>
+            </select>
+          </div>
+
+          <div class="step-nav-footer">
+            <button type="button" class="btn btn-outline prev-btn" data-prev="1">
+              ← Back
+            </button>
+            <button type="button" class="btn btn-primary btn-lg next-btn" data-next="3">
+              Continue to Employment →
+            </button>
+          </div>
+        </fieldset>
+
+        <!-- Step 3: Employment & Income -->
+        <fieldset class="form-step" id="step-3" style="display: none;">
+          <legend class="step-legend font-heading">Employment & Monthly Income</legend>
+          <p class="step-instruction">Lenders approve loans based on verifiable income, not just credit scores.</p>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="employment-type" class="form-label">Employment Type</label>
+              <select id="employment-type" name="employment_type" class="form-select" required>
+                <option value="employed_full">Employed Full-Time (T4)</option>
+                <option value="employed_part">Employed Part-Time</option>
+                <option value="self_employed">Self-Employed / Contractor / Trades</option>
+                <option value="gig">Uber / Delivery / Gig Economy</option>
+                <option value="pension">Pension / Disability / Government</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="monthly-income" class="form-label">Estimated Monthly Gross Income (Before Tax)</label>
+              <input type="text" id="monthly-income" name="monthly_income" class="form-input" placeholder="e.g. $4,200" required />
+            </div>
+
+            <div class="form-group">
+              <label for="employer-name" class="form-label">Current Employer / Business Name</label>
+              <input type="text" id="employer-name" name="employer" class="form-input" placeholder="e.g. Fraser Health or Self-Employed" />
+            </div>
+
+            <div class="form-group">
+              <label for="time-at-job" class="form-label">Time With Current Employer</label>
+              <select id="time-at-job" name="time_at_job" class="form-select">
+                <option value="less_6mo">Less than 6 months</option>
+                <option value="6_12mo">6 months to 1 year</option>
+                <option value="1_2yr" selected>1 to 2 years</option>
+                <option value="2yr_plus">2+ years</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="step-nav-footer">
+            <button type="button" class="btn btn-outline prev-btn" data-prev="2">
+              ← Back
+            </button>
+            <button type="button" class="btn btn-primary btn-lg next-btn" data-next="4">
+              Continue to Contact Details →
+            </button>
+          </div>
+        </fieldset>
+
+        <!-- Step 4: Contact & Consent -->
+        <fieldset class="form-step" id="step-4" style="display: none;">
+          <legend class="step-legend font-heading">Where Should Kirk Send Your Options?</legend>
+          <p class="step-instruction">Kirk will text or call you directly with 2–3 options that match your numbers.</p>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="first-name" class="form-label">First Name *</label>
+              <input type="text" id="first-name" name="first_name" class="form-input" placeholder="e.g. Harpreet" required />
+            </div>
+
+            <div class="form-group">
+              <label for="last-name" class="form-label">Last Name *</label>
+              <input type="text" id="last-name" name="last_name" class="form-input" placeholder="e.g. Dhillon" required />
+            </div>
+
+            <div class="form-group">
+              <label for="phone-number" class="form-label">Mobile Phone Number (for SMS) *</label>
+              <input type="tel" id="phone-number" name="phone" class="form-input" placeholder="(778) 888-2093" required />
+            </div>
+
+            <div class="form-group">
+              <label for="email-address" class="form-label">Email Address *</label>
+              <input type="email" id="email-address" name="email" class="form-input" placeholder="your.name@example.com" required />
+            </div>
+
+            <div class="form-group full-width">
+              <label for="city-location" class="form-label">Current City in BC</label>
+              <input type="text" id="city-location" name="city" class="form-input" placeholder="e.g. Surrey, Vancouver, Abbotsford, Langley" />
+            </div>
+          </div>
+
+          <!-- Explicit Compliance & Consent Box -->
+          <div class="consent-container">
+            <label class="consent-checkbox-label">
+              <input type="checkbox" id="consent-check" name="consent" required checked class="consent-checkbox" />
+              <span class="consent-text">
+                I authorize Kirk Auto to contact me via phone, SMS/text, or email regarding vehicle financing options. <strong>I understand that submitting this inquiry does not initiate an unauthorized hard credit check.</strong> A hard credit pull will only occur after Kirk speaks with me and obtains my explicit approval.
+              </span>
+            </label>
+          </div>
+
+          <div class="step-nav-footer">
+            <button type="button" class="btn btn-outline prev-btn" data-prev="3">
+              ← Back
+            </button>
+            <button type="button" class="btn btn-primary btn-lg submit-preapp-btn" id="submit-preapp-btn">
+              Submit My Pre-Approval Inquiry →
+            </button>
+          </div>
+        </fieldset>
+
+        <!-- Success Message Container -->
+        <div class="success-container" id="form-success" style="display: none;">
+          <div class="success-icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#1E5B47" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <h2 class="success-title font-heading">Application Received, Thank You!</h2>
+          <p class="success-lead">
+            Kirk has received your pre-approval details. Because you deal with Kirk directly, he will review your situation and send you a text message within <strong>15 to 30 minutes</strong> (during business hours) with realistic options.
+          </p>
+          <div class="success-actions">
+            <a href="/inventory" class="btn btn-primary btn-lg">Browse Available Inventory</a>
+            <a href="sms:+17788882093?body=Hi%20Kirk%2C%20I%20just%20submitted%20my%20pre-approval%20application" class="btn btn-outline btn-lg">Text Kirk Directly</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  function setupPreApproval() {
+    const steps = [
+      document.getElementById('step-1'),
+      document.getElementById('step-2'),
+      document.getElementById('step-3'),
+      document.getElementById('step-4'),
+    ];
+    const progressFill = document.getElementById('progress-fill');
+    const stepIndicator = document.getElementById('step-indicator');
+    const successBox = document.getElementById('form-success');
+    const submitBtn = document.getElementById('submit-preapp-btn');
+
+    const stepTitles = [
+      'Step 1 of 4: Your Credit Situation',
+      'Step 2 of 4: Vehicle & Budget',
+      'Step 3 of 4: Employment & Income',
+      'Step 4 of 4: Contact & Consent'
+    ];
+
+    function showStep(stepNum: number) {
+      steps.forEach((s, idx) => {
+        if (!s) return;
+        if (idx === stepNum - 1) {
+          s.style.display = 'block';
+          s.classList.add('active');
+        } else {
+          s.style.display = 'none';
+          s.classList.remove('active');
+        }
+      });
+
+      if (progressFill) progressFill.style.width = `${stepNum * 25}%`;
+      if (stepIndicator) stepIndicator.textContent = stepTitles[stepNum - 1];
+      window.scrollTo({ top: 120, behavior: 'smooth' });
+    }
+
+    // Step 1 option cards selection toggle
+    const optionCards = document.querySelectorAll('.option-card');
+    optionCards.forEach(card => {
+      card.addEventListener('click', () => {
+        optionCards.forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+      });
+    });
+
+    // Step 2 body cards selection toggle
+    const bodyCards = document.querySelectorAll('.body-card');
+    bodyCards.forEach(card => {
+      card.addEventListener('click', () => {
+        bodyCards.forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+      });
+    });
+
+    // Navigation buttons
+    document.querySelectorAll('.next-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const nextStep = parseInt((e.currentTarget as HTMLElement).dataset.next || '1', 10);
+        showStep(nextStep);
+      });
+    });
+
+    document.querySelectorAll('.prev-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const prevStep = parseInt((e.currentTarget as HTMLElement).dataset.prev || '1', 10);
+        showStep(prevStep);
+      });
+    });
+
+    // Submit handler
+    if (submitBtn) {
+      submitBtn.addEventListener('click', () => {
+        const step4 = document.getElementById('step-4');
+        const progressContainer = document.querySelector('.progress-bar-container') as HTMLElement;
+        if (step4) step4.style.display = 'none';
+        if (progressContainer) progressContainer.style.display = 'none';
+        if (successBox) successBox.style.display = 'flex';
+        window.scrollTo({ top: 100, behavior: 'smooth' });
+      });
+    }
+
+    // Pre-select params from URL (e.g. ?situation=newcomer&vehicle=car)
+    const urlParams = new URLSearchParams(window.location.search);
+    const sitParam = urlParams.get('situation');
+    if (sitParam) {
+      const radio = document.querySelector<HTMLInputElement>(`input[name="situation"][value="${sitParam}"]`);
+      if (radio) {
+        radio.checked = true;
+        optionCards.forEach(c => c.classList.remove('selected'));
+        radio.closest('.option-card')?.classList.add('selected');
+      }
+    }
+  }
+
+  setupPreApproval();
+  document.addEventListener('astro:page-load', setupPreApproval);
+</script>
+
+<style>
+  .preapp-page {
+    padding-top: 48px;
+    padding-bottom: 80px;
+    max-width: 820px;
+  }
+
+  .preapp-header {
+    margin-bottom: 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .page-title {
+    font-size: clamp(34px, 5.5vw, 52px);
+  }
+
+  .page-subtitle {
+    font-size: 18px;
+    color: var(--text-muted);
+    max-width: 640px;
+    line-height: 1.5;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .form-wrapper {
+    background: #FFFFFF;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 36px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  @media (max-width: 640px) {
+    .form-wrapper {
+      padding: 24px 18px;
+    }
+  }
+
+  /* Progress bar */
+  .progress-bar-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+
+  .progress-track {
+    width: 100%;
+    height: 6px;
+    background: #ECE8E1;
+    border-radius: var(--radius-full);
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background-color: var(--accent);
+    transition: width 0.3s ease;
+  }
+
+  .step-indicator {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Form Step Layout */
+  .form-step {
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .step-legend {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 700;
+    color: var(--text-main);
+    line-height: 1.15;
+    margin-bottom: 6px;
+  }
+
+  .step-instruction {
+    font-size: 15px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+
+  /* Option Cards for Step 1 */
+  .card-options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .option-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 20px;
+    border: 1.5px solid var(--border-light);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    background: #FFFFFF;
+  }
+
+  .option-card:hover {
+    border-color: var(--accent);
+    background: #FAF8F5;
+  }
+
+  .option-card.selected {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+
+  .card-radio-mark {
+    width: 20px;
+    height: 20px;
+    border-radius: var(--radius-full);
+    border: 2px solid var(--border-light);
+    margin-top: 3px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .option-card.selected .card-radio-mark {
+    border-color: var(--accent);
+    background-color: var(--accent);
+  }
+
+  .card-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  /* Step 2 Body Style Grid */
+  .body-choice-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+  }
+
+  .body-card {
+    padding: 16px 12px;
+    border: 1.5px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .body-card:hover {
+    border-color: var(--accent);
+  }
+
+  .body-card.selected {
+    border-color: var(--accent);
+    background-color: var(--accent-light);
+  }
+
+  .body-name {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text-main);
+  }
+
+  .body-range {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  /* Step 3 & 4 Grid */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  @media (min-width: 600px) {
+    .form-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .full-width {
+    grid-column: 1 / -1;
+  }
+
+  /* Step Footer Navigation */
+  .step-nav-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  /* Consent Box */
+  .consent-container {
+    margin-top: 20px;
+    background: #FAF8F5;
+    padding: 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-light);
+  }
+
+  .consent-checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #4A5568;
+    cursor: pointer;
+  }
+
+  .consent-checkbox {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* Success Screen */
+  .success-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    padding: 32px 16px;
+  }
+
+  .success-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-full);
+    background: var(--accent-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .success-title {
+    font-size: 36px;
+  }
+
+  .success-lead {
+    font-size: 17px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 580px;
+  }
+
+  .success-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+</style>

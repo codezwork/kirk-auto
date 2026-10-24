@@ -1,0 +1,501 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SITUATIONS } from '../data/situations';
+---
+
+<Layout
+  title="BC Car Payment Calculator with Taxes & Bad Credit Rates | Kirk Auto"
+  description="Calculate realistic bi-weekly and monthly car loan payments in British Columbia. Includes BC 12% PST/GST, loan term options, and realistic interest rates for bad credit and newcomers."
+>
+  <div class="calc-page container">
+    <div class="calc-header text-center">
+      <span class="badge-amber">BC Auto Loan Calculator</span>
+      <h1 class="page-title font-heading">Car Loan Payment Calculator for BC</h1>
+      <p class="page-subtitle">
+        Calculate your real bi-weekly and monthly vehicle payments with British Columbia sales taxes and credit-tier APR options.
+      </p>
+    </div>
+
+    <!-- Calculator Card -->
+    <div class="calc-grid card">
+      <!-- Input Controls Column -->
+      <div class="inputs-col">
+        <!-- Vehicle Price -->
+        <div class="calc-field">
+          <div class="field-top">
+            <label for="price-input" class="calc-label">Vehicle Price (All-In):</label>
+            <span class="field-val font-heading" id="price-display">$20,000</span>
+          </div>
+          <input
+            type="range"
+            id="price-range"
+            min="5000"
+            max="45000"
+            step="500"
+            value="20000"
+            class="slider"
+          />
+          <div class="range-marks">
+            <span>$5,000</span>
+            <span>$25,000</span>
+            <span>$45,000</span>
+          </div>
+        </div>
+
+        <!-- Down Payment -->
+        <div class="calc-field">
+          <div class="field-top">
+            <label for="down-range" class="calc-label">Down Payment or Trade-In Value:</label>
+            <span class="field-val font-heading" id="down-display">$0</span>
+          </div>
+          <input
+            type="range"
+            id="down-range"
+            min="0"
+            max="15000"
+            step="500"
+            value="0"
+            class="slider"
+          />
+          <div class="range-marks">
+            <span>$0 (Most common)</span>
+            <span>$5,000</span>
+            <span>$15,000</span>
+          </div>
+        </div>
+
+        <!-- Credit Tier / Interest Rate -->
+        <div class="calc-field">
+          <label for="situation-select" class="calc-label">Your Credit Situation & Estimated APR:</label>
+          <select id="situation-select" class="form-select">
+            {SITUATIONS.map((sit) => (
+              <option value={((sit.aprLo + sit.aprHi) / 2).toFixed(2)}>
+                {sit.label} (~{((sit.aprLo + sit.aprHi) / 2).toFixed(1)}% APR)
+              </option>
+            ))}
+            <option value="6.99">Prime Credit 720+ (~6.99% APR)</option>
+          </select>
+        </div>
+
+        <!-- Term Months -->
+        <div class="calc-field">
+          <label class="calc-label">Loan Term (Duration):</label>
+          <div class="term-chips" id="term-group">
+            <button type="button" class="term-btn" data-term="48">48 mo</button>
+            <button type="button" class="term-btn" data-term="60">60 mo</button>
+            <button type="button" class="term-btn" data-term="72">72 mo</button>
+            <button type="button" class="term-btn active" data-term="84">84 mo</button>
+          </div>
+        </div>
+
+        <!-- BC Tax Checkbox -->
+        <div class="tax-toggle-box">
+          <label class="tax-check-label">
+            <input type="checkbox" id="include-tax-check" checked class="tax-check" />
+            <span>Include 12% BC Sales Tax (7% PST + 5% GST) in total financed amount</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Live Results Summary Column -->
+      <div class="summary-col">
+        <span class="summary-tag font-heading">Estimated Payment</span>
+
+        <div class="main-payment-box">
+          <span class="biweekly-num font-heading" id="res-biweekly">$154</span>
+          <span class="biweekly-label">Every Two Weeks</span>
+        </div>
+
+        <div class="monthly-equiv">
+          <span>or approximately <strong id="res-monthly">$334</strong> / month</span>
+        </div>
+
+        <div class="breakdown-list">
+          <div class="breakdown-row">
+            <span>Vehicle Price:</span>
+            <strong id="res-vehicle-price">$20,000</strong>
+          </div>
+          <div class="breakdown-row">
+            <span>BC 12% Tax (PST/GST):</span>
+            <strong id="res-tax-amount">+$2,400</strong>
+          </div>
+          <div class="breakdown-row">
+            <span>Down Payment:</span>
+            <strong id="res-down-amount">-$0</strong>
+          </div>
+          <div class="breakdown-row total-row">
+            <span>Total Financed:</span>
+            <strong id="res-total-loan" class="font-heading">$22,400</strong>
+          </div>
+        </div>
+
+        <div class="summary-actions">
+          <a href="/pre-approval" class="btn btn-primary btn-lg full-btn" id="calc-preapprove-cta">
+            Lock In This Payment →
+          </a>
+          <a href="sms:+17788882093?body=Hi%20Kirk%2C%20I%20used%20your%20calculator%20for%20a%20car%20and%20had%20a%20question" class="btn btn-outline-white full-btn">
+            Text Kirk This Estimate
+          </a>
+        </div>
+
+        <p class="summary-disclaimer">
+          Illustrative calculation OAC. Documentation fee included. Exact terms, APR, and payment schedules are set by the approved financial institution upon approval.
+        </p>
+      </div>
+    </div>
+
+    <!-- FAQ Section for SEO -->
+    <section class="calc-faq-section">
+      <h2 class="faq-section-title font-heading">Frequently Asked Questions: BC Car Loans</h2>
+      <div class="faq-grid">
+        <div class="faq-card card">
+          <h3 class="faq-question">How does bi-weekly car financing work in Canada?</h3>
+          <p class="faq-answer">
+            Bi-weekly payments occur every two weeks (26 payments per year). Because there are 52 weeks in a year, you make the equivalent of 13 monthly payments annually instead of 12. This pays off your loan faster and reduces total interest charges.
+          </p>
+        </div>
+        <div class="faq-card card">
+          <h3 class="faq-question">How much is tax on a used car in British Columbia?</h3>
+          <p class="faq-answer">
+            When buying from a licensed BC motor dealer, you pay 5% GST and 7% PST (total 12% tax) on vehicles under $55,000. If you trade in a car, the trade value is deducted before the tax is calculated, saving you 12% on the trade amount.
+          </p>
+        </div>
+        <div class="faq-card card">
+          <h3 class="faq-question">Can I get an 84-month car loan with bad credit?</h3>
+          <p class="faq-answer">
+            Yes. Many Canadian subprime and non-prime auto lenders offer 72 to 84-month terms on qualifying late-model used vehicles. A longer term keeps your bi-weekly payment low and manageable for your monthly budget.
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<script>
+  function setupCalculator() {
+    const priceSlider = document.getElementById('price-range') as HTMLInputElement;
+    const priceDisplay = document.getElementById('price-display');
+    const downSlider = document.getElementById('down-range') as HTMLInputElement;
+    const downDisplay = document.getElementById('down-display');
+    const sitSelect = document.getElementById('situation-select') as HTMLSelectElement;
+    const termButtons = document.querySelectorAll<HTMLButtonElement>('.term-btn');
+    const taxCheck = document.getElementById('include-tax-check') as HTMLInputElement;
+
+    const resBiweekly = document.getElementById('res-biweekly');
+    const resMonthly = document.getElementById('res-monthly');
+    const resVehiclePrice = document.getElementById('res-vehicle-price');
+    const resTax = document.getElementById('res-tax-amount');
+    const resDown = document.getElementById('res-down-amount');
+    const resTotal = document.getElementById('res-total-loan');
+
+    let currentTerm = 84;
+
+    function recalculate() {
+      const price = parseInt(priceSlider?.value || '20000', 10);
+      const down = parseInt(downSlider?.value || '0', 10);
+      const apr = parseFloat(sitSelect?.value || '11.49');
+      const includeTax = taxCheck?.checked ?? true;
+
+      if (priceDisplay) priceDisplay.textContent = `$${price.toLocaleString('en-CA')}`;
+      if (downDisplay) downDisplay.textContent = `$${down.toLocaleString('en-CA')}`;
+
+      const tax = includeTax ? Math.round(price * 0.12) : 0;
+      const principal = Math.max(1000, price + tax - down);
+
+      const payments = (currentTerm / 12) * 26;
+      const r = (apr / 100) / 26;
+      const biweekly = r === 0 ? Math.round(principal / payments) : Math.round((principal * r) / (1 - Math.pow(1 + r, -payments)));
+      const monthly = Math.round((biweekly * 26) / 12);
+
+      if (resBiweekly) resBiweekly.textContent = `$${biweekly}`;
+      if (resMonthly) resMonthly.textContent = `$${monthly}`;
+      if (resVehiclePrice) resVehiclePrice.textContent = `$${price.toLocaleString('en-CA')}`;
+      if (resTax) resTax.textContent = includeTax ? `+$${tax.toLocaleString('en-CA')}` : '$0';
+      if (resDown) resDown.textContent = `-$${down.toLocaleString('en-CA')}`;
+      if (resTotal) resTotal.textContent = `$${principal.toLocaleString('en-CA')}`;
+    }
+
+    priceSlider?.addEventListener('input', recalculate);
+    downSlider?.addEventListener('input', recalculate);
+    sitSelect?.addEventListener('change', recalculate);
+    taxCheck?.addEventListener('change', recalculate);
+
+    termButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        termButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentTerm = parseInt(btn.dataset.term || '84', 10);
+        recalculate();
+      });
+    });
+
+    recalculate();
+  }
+
+  setupCalculator();
+  document.addEventListener('astro:page-load', setupCalculator);
+</script>
+
+<style>
+  .calc-page {
+    padding-top: 48px;
+    padding-bottom: 80px;
+  }
+
+  .calc-header {
+    margin-bottom: 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .page-title {
+    font-size: clamp(34px, 5.5vw, 52px);
+  }
+
+  .page-subtitle {
+    font-size: 18px;
+    color: var(--text-muted);
+    max-width: 680px;
+    line-height: 1.5;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  /* Grid Card */
+  .calc-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    background: #FFFFFF;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+  }
+
+  @media (min-width: 900px) {
+    .calc-grid {
+      grid-template-columns: 1.25fr 0.85fr;
+    }
+  }
+
+  /* Inputs Column */
+  .inputs-col {
+    padding: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .calc-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .field-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .calc-label {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+
+  .field-val {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  .slider {
+    width: 100%;
+    height: 8px;
+    border-radius: var(--radius-full);
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+
+  .range-marks {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .term-chips {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  .term-btn {
+    padding: 10px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border-light);
+    background: #FFFFFF;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-main);
+    transition: all 0.15s ease;
+  }
+
+  .term-btn:hover {
+    border-color: var(--accent);
+  }
+
+  .term-btn.active {
+    background-color: var(--accent);
+    color: #FFFFFF;
+    border-color: var(--accent);
+  }
+
+  .tax-toggle-box {
+    background: #FAF8F5;
+    padding: 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-light);
+  }
+
+  .tax-check-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-main);
+    cursor: pointer;
+  }
+
+  .tax-check {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent);
+  }
+
+  /* Summary Column */
+  .summary-col {
+    background: var(--dark-base);
+    color: var(--text-inverse);
+    padding: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .summary-tag {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--amber);
+  }
+
+  .main-payment-box {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+
+  .biweekly-num {
+    font-size: clamp(48px, 6vw, 64px);
+    font-weight: 800;
+    color: #FFFFFF;
+  }
+
+  .biweekly-label {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--amber);
+    margin-top: 6px;
+  }
+
+  .monthly-equiv {
+    font-size: 14px;
+    color: #94A3B8;
+  }
+
+  .monthly-equiv strong {
+    color: #FFFFFF;
+  }
+
+  .breakdown-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 14px;
+    border-top: 1px solid var(--border-dark);
+    padding-top: 16px;
+  }
+
+  .breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    color: #CBD5E1;
+  }
+
+  .total-row {
+    padding-top: 8px;
+    border-top: 1px dashed var(--border-dark);
+    font-size: 16px;
+    color: #FFFFFF;
+  }
+
+  .summary-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .full-btn {
+    width: 100%;
+  }
+
+  .summary-disclaimer {
+    font-size: 11px;
+    line-height: 1.4;
+    color: #64748B;
+  }
+
+  /* FAQ */
+  .calc-faq-section {
+    margin-top: 64px;
+  }
+
+  .faq-section-title {
+    font-size: 32px;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+
+  .faq-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .faq-card {
+    padding: 24px;
+    background: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .faq-question {
+    font-size: 18px;
+    color: var(--text-main);
+  }
+
+  .faq-answer {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+</style>

@@ -1,0 +1,307 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import VehicleCard from '../../components/VehicleCard.astro';
+import { VEHICLES } from '../../data/vehicles';
+---
+
+<Layout
+  title="Inventory | Quality Used Cars Under $25k & Trucks in BC | Kirk Auto"
+  description="Browse inspected used cars, SUVs, and trucks in Metro Vancouver & Fraser Valley. All-in transparent pricing, documentation included, and door-to-door delivery."
+>
+  <div class="inventory-page">
+    <!-- Page Header -->
+    <section class="page-intro">
+      <div class="container">
+        <span class="badge-amber">Current Lot & Available Units</span>
+        <h1 class="page-title font-heading">Used Vehicles in British Columbia</h1>
+        <p class="page-desc">
+          Every vehicle is safety certified, fully inspected, and listed with all-in pricing—every documentation and dealer fee is included in the price you see.
+        </p>
+      </div>
+    </section>
+
+    <!-- Filters & Catalog Container -->
+    <section class="catalog-section">
+      <div class="container">
+        <!-- Filter Controls Bar -->
+        <div class="filter-bar card">
+          <div class="filter-row">
+            <!-- Body Type Chips -->
+            <div class="filter-group">
+              <span class="filter-label">Body Style:</span>
+              <div class="chips-container" id="body-filter-group">
+                <button type="button" class="filter-chip active" data-filter="all">All ({VEHICLES.length})</button>
+                <button type="button" class="filter-chip" data-filter="car">Cars</button>
+                <button type="button" class="filter-chip" data-filter="suv">SUVs</button>
+                <button type="button" class="filter-chip" data-filter="truck">Trucks</button>
+                <button type="button" class="filter-chip" data-filter="van">Vans</button>
+              </div>
+            </div>
+
+            <!-- Quick Filter Chips -->
+            <div class="filter-group">
+              <span class="filter-label">Special:</span>
+              <div class="chips-container" id="special-filter-group">
+                <button type="button" class="filter-chip" data-special="under25k">Under $25k</button>
+                <button type="button" class="filter-chip" data-special="lifted">Lifted 4x4</button>
+              </div>
+            </div>
+
+            <!-- Sort By Select -->
+            <div class="sort-wrap">
+              <label for="sort-select" class="filter-label">Sort By:</label>
+              <select id="sort-select" class="form-select sort-select">
+                <option value="featured">Kirk's Picks</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="km-asc">Mileage: Lowest First</option>
+                <option value="year-desc">Year: Newest First</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vehicle Grid -->
+        <div class="inventory-grid" id="inventory-grid">
+          {VEHICLES.map((vehicle) => (
+            <div
+              class="vehicle-grid-item"
+              data-body={vehicle.bodyType}
+              data-price={vehicle.price}
+              data-km={vehicle.km}
+              data-year={vehicle.year}
+              data-under25k={vehicle.isUnder25k ? "true" : "false"}
+              data-lifted={vehicle.isLifted ? "true" : "false"}
+            >
+              <VehicleCard vehicle={vehicle} />
+            </div>
+          ))}
+        </div>
+
+        <!-- Empty State (Hidden by default) -->
+        <div class="empty-state card" id="empty-state" style="display: none;">
+          <h3 class="empty-title font-heading">No vehicles match your active filter.</h3>
+          <p class="empty-desc">
+            Kirk has access to wholesale dealer inventory and private BC listings. Text Kirk what you need and he'll source it for you.
+          </p>
+          <a href="sms:+17788882093?body=Hi%20Kirk%2C%20I'm%20looking%20for%20a%20car%20that's%20not%20on%20your%20site%3A%20" class="btn btn-primary btn-lg">
+            Text Kirk What You Need
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<script>
+  function setupInventoryFilters() {
+    const grid = document.getElementById('inventory-grid');
+    if (!grid) return;
+
+    const items = Array.from(grid.querySelectorAll<HTMLElement>('.vehicle-grid-item'));
+    const bodyChips = document.querySelectorAll<HTMLButtonElement>('#body-filter-group .filter-chip');
+    const specialChips = document.querySelectorAll<HTMLButtonElement>('#special-filter-group .filter-chip');
+    const sortSelect = document.getElementById('sort-select') as HTMLSelectElement;
+    const emptyState = document.getElementById('empty-state');
+
+    let currentBody = 'all';
+    let currentSpecial: string | null = null;
+
+    function applyFilterAndSort() {
+      let visibleCount = 0;
+
+      items.forEach((item) => {
+        const itemBody = item.dataset.body || '';
+        const itemUnder25k = item.dataset.under25k === 'true';
+        const itemLifted = item.dataset.lifted === 'true';
+
+        let matchesBody = currentBody === 'all' || itemBody === currentBody;
+        let matchesSpecial = true;
+
+        if (currentSpecial === 'under25k') matchesSpecial = itemUnder25k;
+        if (currentSpecial === 'lifted') matchesSpecial = itemLifted;
+
+        if (matchesBody && matchesSpecial) {
+          item.style.display = 'block';
+          visibleCount++;
+        } else {
+          item.style.display = 'none';
+        }
+      });
+
+      if (emptyState) {
+        emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+      }
+
+      // Sorting
+      const sortValue = sortSelect ? sortSelect.value : 'featured';
+      const sorted = [...items].sort((a, b) => {
+        const pA = parseInt(a.dataset.price || '0', 10);
+        const pB = parseInt(b.dataset.price || '0', 10);
+        const kmA = parseInt(a.dataset.km || '0', 10);
+        const kmB = parseInt(b.dataset.km || '0', 10);
+        const yA = parseInt(a.dataset.year || '0', 10);
+        const yB = parseInt(b.dataset.year || '0', 10);
+
+        if (sortValue === 'price-asc') return pA - pB;
+        if (sortValue === 'price-desc') return pB - pA;
+        if (sortValue === 'km-asc') return kmA - kmB;
+        if (sortValue === 'year-desc') return yB - yA;
+        return 0;
+      });
+
+      sorted.forEach(item => grid.appendChild(item));
+    }
+
+    bodyChips.forEach(btn => {
+      btn.addEventListener('click', () => {
+        bodyChips.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentBody = btn.dataset.filter || 'all';
+        applyFilterAndSort();
+      });
+    });
+
+    specialChips.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('active')) {
+          btn.classList.remove('active');
+          currentSpecial = null;
+        } else {
+          specialChips.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentSpecial = btn.dataset.special || null;
+        }
+        applyFilterAndSort();
+      });
+    });
+
+    if (sortSelect) {
+      sortSelect.addEventListener('change', applyFilterAndSort);
+    }
+  }
+
+  setupInventoryFilters();
+  document.addEventListener('astro:page-load', setupInventoryFilters);
+</script>
+
+<style>
+  .inventory-page {
+    padding-bottom: 72px;
+  }
+
+  .page-intro {
+    background: #FAF8F5;
+    padding: 48px 0;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .page-title {
+    font-size: clamp(36px, 5.5vw, 54px);
+    margin-top: 4px;
+  }
+
+  .page-desc {
+    font-size: 18px;
+    color: var(--text-muted);
+    max-width: 680px;
+    margin-top: 8px;
+  }
+
+  .catalog-section {
+    padding-top: 36px;
+  }
+
+  .filter-bar {
+    padding: 18px 24px;
+    margin-bottom: 32px;
+    background: #FFFFFF;
+  }
+
+  .filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .filter-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .filter-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+
+  .chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .filter-chip {
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-light);
+    background: #FFFFFF;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-main);
+    transition: all 0.15s ease;
+  }
+
+  .filter-chip:hover {
+    border-color: var(--accent);
+    background: #FAF8F5;
+  }
+
+  .filter-chip.active {
+    background-color: var(--accent);
+    color: #FFFFFF;
+    border-color: var(--accent);
+  }
+
+  .sort-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sort-select {
+    width: auto;
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+
+  .inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+  }
+
+  .empty-state {
+    padding: 48px;
+    text-align: center;
+    max-width: 540px;
+    margin: 40px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .empty-title {
+    font-size: 28px;
+  }
+
+  .empty-desc {
+    font-size: 16px;
+    color: var(--text-muted);
+  }
+</style>

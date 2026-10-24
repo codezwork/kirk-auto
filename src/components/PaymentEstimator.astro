@@ -1,0 +1,354 @@
+---
+import { SITUATIONS } from '../data/situations';
+
+const vehicleCategories = [
+  { id: 'car', label: 'Car or small SUV', noun: 'car', price: 18000 },
+  { id: 'suv', label: 'SUV or minivan', noun: 'SUV', price: 24000 },
+  { id: 'truck', label: 'Pickup truck', noun: 'truck', price: 28000 }
+];
+---
+
+<div class="calculator-card" id="hero-estimator">
+  <div class="calc-inputs">
+  <div class="calc-step">
+    <label class="calc-step-label">1. Your situation</label>
+    <div class="pill-group" role="radiogroup" aria-label="Select your credit situation">
+      {SITUATIONS.map((sit, index) => (
+        <button
+          type="button"
+          class:list={['pill-btn', 'sit-btn', { active: index === 0 }]}
+          data-situation-id={sit.id}
+          data-phrase={sit.phrase}
+          data-apr-lo={sit.aprLo}
+          data-apr-hi={sit.aprHi}
+          role="radio"
+          aria-checked={index === 0 ? "true" : "false"}
+        >
+          {sit.label}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <div class="calc-step">
+    <label class="calc-step-label">2. What you're shopping for</label>
+    <div class="pill-group" role="radiogroup" aria-label="Select vehicle category">
+      {vehicleCategories.map((veh, index) => (
+        <button
+          type="button"
+          class:list={['pill-btn', 'veh-btn', { active: index === 0 }]}
+          data-veh-id={veh.id}
+          data-veh-noun={veh.noun}
+          data-price={veh.price}
+          role="radio"
+          aria-checked={index === 0 ? "true" : "false"}
+        >
+          {veh.label}
+        </button>
+      ))}
+    </div>
+  </div>
+  </div>
+
+  <div class="calc-output">
+  <!-- Dynamic Result Display -->
+  <div class="calc-result-box">
+    <div class="result-left">
+      <span class="est-phrase" id="calc-phrase">Rough estimate if you're new to Canada:</span>
+      <div class="payment-row">
+        <span class="payment-range font-heading" id="calc-payment-range">$132–$159</span>
+        <span class="payment-freq">every two weeks</span>
+      </div>
+    </div>
+
+    <div class="result-actions">
+      <a href="/pre-approval?situation=newcomer&vehicle=car" class="btn btn-primary btn-lg" id="calc-cta-btn">
+        See If I Qualify
+      </a>
+      <a href="sms:+17788882093?body=Hi%20Kirk%2C%20I'm%20looking%20at%20a%20car%20and%20wanted%20to%20see%20my%20options" class="alt-action-link">
+        or text Kirk instead →
+      </a>
+    </div>
+  </div>
+
+  <p class="calc-disclaimer-note" id="calc-note">
+    Example: $18,000 car, 84 months, [8.99–13.99]% APR, $0 down, before tax, on approved credit. Your real rate comes from the lender.
+  </p>
+
+  <div class="soft-pull-reassurance">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E5B47" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shield-icon">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+    </svg>
+    <span>
+      <strong>No hard credit pull:</strong> Applying online doesn't touch your credit score. Kirk only pulls credit after talking to you and you give written consent.
+    </span>
+  </div>
+  </div>
+</div>
+
+<script>
+  function setupEstimator() {
+    const card = document.getElementById('hero-estimator');
+    if (!card) return;
+
+    let currentSitId = 'newcomer';
+    let currentAprLo = 8.99;
+    let currentAprHi = 13.99;
+    let currentPhrase = "if you're new to Canada";
+    
+    let currentVehId = 'car';
+    let currentPrice = 18000;
+    let currentNoun = 'car';
+    const termMonths = 84;
+
+    const sitButtons = card.querySelectorAll<HTMLButtonElement>('.sit-btn');
+    const vehButtons = card.querySelectorAll<HTMLButtonElement>('.veh-btn');
+    const phraseEl = document.getElementById('calc-phrase');
+    const rangeEl = document.getElementById('calc-payment-range');
+    const noteEl = document.getElementById('calc-note');
+    const ctaBtn = document.getElementById('calc-cta-btn') as HTMLAnchorElement;
+
+    function calculateBiWeekly(price: number, apr: number, months: number = 84): number {
+      const payments = (months / 12) * 26;
+      const r = (apr / 100) / 26;
+      if (r === 0) return Math.round(price / payments);
+      return Math.round((price * r) / (1 - Math.pow(1 + r, -payments)));
+    }
+
+    function update() {
+      const lo = calculateBiWeekly(currentPrice, currentAprLo, termMonths);
+      const hi = calculateBiWeekly(currentPrice, currentAprHi, termMonths);
+      
+      if (rangeEl) rangeEl.textContent = `$${lo}–$${hi}`;
+      if (phraseEl) phraseEl.textContent = `Rough estimate ${currentPhrase}:`;
+      if (noteEl) {
+        noteEl.textContent = `Example: $${currentPrice.toLocaleString('en-CA')} ${currentNoun}, ${termMonths} months, [${currentAprLo.toFixed(2)}–${currentAprHi.toFixed(2)}]% APR, $0 down, before tax, on approved credit. Your real rate comes from the lender.`;
+      }
+      if (ctaBtn) {
+        ctaBtn.href = `/pre-approval?situation=${currentSitId}&vehicle=${currentVehId}`;
+      }
+    }
+
+    sitButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        sitButtons.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-checked', 'false');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-checked', 'true');
+
+        currentSitId = btn.dataset.situationId || 'newcomer';
+        currentAprLo = parseFloat(btn.dataset.aprLo || '8.99');
+        currentAprHi = parseFloat(btn.dataset.aprHi || '13.99');
+        currentPhrase = btn.dataset.phrase || '';
+        update();
+      });
+    });
+
+    vehButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        vehButtons.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-checked', 'false');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-checked', 'true');
+
+        currentVehId = btn.dataset.vehId || 'car';
+        currentPrice = parseInt(btn.dataset.price || '18000', 10);
+        currentNoun = btn.dataset.vehNoun || 'car';
+        update();
+      });
+    });
+
+    update();
+  }
+
+  // Initialize on load and on view transitions
+  setupEstimator();
+  document.addEventListener('astro:page-load', setupEstimator);
+</script>
+
+<style>
+  .calculator-card {
+    background: #FFFFFF;
+    color: var(--text-main);
+    border-radius: var(--radius-md);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  @media (min-width: 640px) {
+    .calculator-card {
+      padding: 30px;
+    }
+  }
+
+  .calc-inputs,
+  .calc-output {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+  }
+
+  /* Wide screens: questions on the left, the estimate on the right */
+  @media (min-width: 900px) {
+    .calculator-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      gap: 0;
+      padding: 24px 32px;
+    }
+
+    .calc-inputs {
+      gap: 16px;
+      padding-right: 32px;
+      border-right: 1px solid var(--border-subtle);
+    }
+
+    .calc-output {
+      padding-left: 32px;
+      gap: 12px;
+    }
+
+    .calc-output .payment-range {
+      font-size: clamp(36px, 3.6vw, 46px);
+    }
+
+    .calc-output .calc-result-box {
+      border-top: 0;
+      padding-top: 0;
+    }
+  }
+
+  .calc-step {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .calc-step-label {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+
+  .pill-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .pill-btn {
+    min-height: 42px;
+    padding: 0 16px;
+    border-radius: var(--radius-full);
+    border: 1.5px solid var(--border-light);
+    background: #FFFFFF;
+    color: var(--text-main);
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.15s ease;
+  }
+
+  .pill-btn:hover {
+    border-color: var(--accent);
+    background: #FAF8F5;
+  }
+
+  .pill-btn.active {
+    background-color: var(--accent);
+    color: #FFFFFF;
+    border-color: var(--accent);
+    box-shadow: 0 2px 8px rgba(30, 91, 71, 0.25);
+  }
+
+  .calc-result-box {
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+  }
+
+  .result-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .est-phrase {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .payment-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .payment-range {
+    font-size: clamp(38px, 6vw, 54px);
+    font-weight: 800;
+    color: var(--dark-base);
+    line-height: 1;
+  }
+
+  .payment-freq {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-main);
+  }
+
+  .result-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .alt-action-link {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .alt-action-link:hover {
+    text-decoration: underline;
+  }
+
+  .calc-disclaimer-note {
+    font-size: 13px;
+    color: #717B88;
+    line-height: 1.5;
+  }
+
+  .soft-pull-reassurance {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: #EFECE6;
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #2D3748;
+  }
+
+  .shield-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+</style>

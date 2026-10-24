@@ -1,0 +1,553 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PaymentEstimator from '../components/PaymentEstimator.astro';
+import VehicleCard from '../components/VehicleCard.astro';
+import WhyBuySection from '../components/WhyBuySection.astro';
+import SecondOpinionBanner from '../components/SecondOpinionBanner.astro';
+import TestimonialsSection from '../components/TestimonialsSection.astro';
+import HeroSlideshow from '../components/HeroSlideshow.astro';
+import { VEHICLES } from '../data/vehicles';
+
+const featuredVehicles = VEHICLES.filter((v) => v.featured).slice(0, 5);
+---
+
+<Layout
+  title="Kirk Auto | Bad Credit & Newcomer Car Loans in BC | All-In Pricing"
+  description="Buy quality used cars under $25k and trucks in Metro Vancouver & Fraser Valley. Real auto financing for bad credit, newcomers, and consumer proposals. Deal directly with Kirk."
+>
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <!-- Row 1: headline beside the slideshow -->
+    <div class="container hero-top">
+      <div class="hero-content">
+        <span class="hero-badge badge-amber">Used Cars & Car Loans · Metro Vancouver & Fraser Valley</span>
+        <h1 class="hero-title font-heading">
+          Credit not perfect? <span class="highlight-text">See what you'd pay first.</span>
+        </h1>
+        <p class="hero-subtitle">
+          Pick your situation for a rough payment every two weeks. Kirk gives you the real numbers when you're ready—with zero pushy dealer games.
+        </p>
+
+        <div class="hero-guarantee-pill">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E9A23B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>The price you see is the price you pay. Every dealer doc fee is included.</span>
+        </div>
+      </div>
+
+      <!-- Hero Slideshow / Recent Deliveries Card -->
+      <aside class="hero-kirk-card">
+        <HeroSlideshow />
+      </aside>
+    </div>
+
+    <!-- Row 2: payment estimator across the full width -->
+    <div class="container hero-estimator-row">
+      <PaymentEstimator />
+    </div>
+  </section>
+
+  <!-- Value Pillars -->
+  <WhyBuySection />
+
+  <!-- Kirk's Picks Inventory Section -->
+  <section class="inventory-section">
+    <div class="container">
+      <div class="section-top-row">
+        <div>
+          <span class="badge-amber">Current Showroom</span>
+          <h2 class="section-heading font-heading">Kirk's Picks This Month</h2>
+          <p class="section-sub">
+            Hand-picked cars under $25,000, plus reliable 4x4 trucks. Every price includes all documentation fees; only provincial/federal tax is extra.
+          </p>
+        </div>
+        <a href="/inventory" class="btn btn-outline">
+          View All Vehicles ({VEHICLES.length}) →
+        </a>
+      </div>
+
+      <div class="vehicles-grid">
+        {featuredVehicles.map((vehicle) => (
+          <VehicleCard vehicle={vehicle} />
+        ))}
+
+        <!-- Custom Request Card -->
+        <article class="custom-request-card card">
+          <div class="request-inner">
+            <span class="badge-amber">Custom Sourcing</span>
+            <h3 class="request-title font-heading">Don't see the exact vehicle you need?</h3>
+            <p class="request-desc">
+              Text Kirk your desired body style, key features, and realistic budget. He accesses wholesale dealer auctions across BC and will text you 3 matching options, usually within 24 hours.
+            </p>
+            <a href="sms:+17788882093?body=Hi%20Kirk%2C%20I'm%20looking%20for%20a%20specific%20vehicle%3A%20" class="btn btn-amber btn-lg">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <span>Text Kirk What You Need</span>
+            </a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Second Opinion High-Impact Section -->
+  <SecondOpinionBanner />
+
+  <!-- Split Pre-Approval & Trade-In Section -->
+  <section class="split-funnel-section">
+    <div class="container split-grid">
+      <!-- Pre-Approval Card -->
+      <div class="funnel-card green-card">
+        <span class="badge-pill light">Fast & Free</span>
+        <h2 class="funnel-title font-heading">Start your pre-approval in 2 minutes</h2>
+        <p class="funnel-text">
+          Tell Kirk your monthly budget and employment. He calls or texts back with realistic bank options, not an aggressive sales pitch.
+        </p>
+        <div class="funnel-reassurance">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <span>Applying doesn't touch your credit score. Kirk only runs a credit check after you've talked and you say yes.</span>
+        </div>
+        <a href="/pre-approval" class="btn btn-white btn-lg">
+          Start Pre-Approval Now →
+        </a>
+      </div>
+
+      <!-- Trade-In Card -->
+      <div class="funnel-card white-card">
+        <span class="badge-pill dark">Fair Appraisals</span>
+        <h2 class="funnel-title font-heading">What's your current car worth?</h2>
+        <p class="funnel-text">
+          Send your car's year, make, mileage and 3 photos. Kirk evaluates local BC market comps and gives you a genuine trade offer you can apply straight toward your next vehicle.
+        </p>
+        <div class="trade-features">
+          <div class="trade-check">✓ Trade-in value knocks down your sales tax</div>
+          <div class="trade-check">✓ We take high-mileage cars, older trade-ins, & trucks</div>
+        </div>
+        <a href="/trade-in" class="btn btn-dark btn-lg">
+          Get Instant Trade-In Value →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Meet Kirk Spotlight -->
+  <section class="meet-kirk-spotlight">
+    <div class="container spotlight-inner">
+      <div class="spotlight-visual">
+        <div class="spotlight-avatar">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </div>
+        <div class="spotlight-tag font-heading">Licensed BC Dealer #[XXXXX]</div>
+      </div>
+
+      <div class="spotlight-text">
+        <span class="badge-green">Personal Service</span>
+        <h2 class="spotlight-heading font-heading">You deal with the owner, start to finish.</h2>
+        <p class="spotlight-body">
+          Big dealerships pass you around from a sales rep, to a sales manager, to a finance closer trying to sell you $3,000 warranties. Kirk runs a lean, direct operation. He answers his own phone, arranges the bank financing himself, and delivers the vehicle to your doorstep.
+        </p>
+        <div class="spotlight-actions">
+          <a href="/about-kirk" class="btn btn-primary">
+            Read Kirk's Story & How He Works →
+          </a>
+          <a href="sms:+17788882093" class="btn btn-outline">
+            Text Kirk (778) 888-2093
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Proof Reviews -->
+  <TestimonialsSection />
+
+  <!-- Direct Contact Strip -->
+  <section class="quick-contact-section">
+    <div class="container quick-contact-inner">
+      <div class="contact-lead">
+        <h2 class="contact-heading font-heading">Questions? Talk to Kirk directly.</h2>
+        <p class="contact-sub">Available Mon–Sat 9am–7pm · Serving Vancouver, Surrey, Langley, Abbotsford & Fraser Valley.</p>
+      </div>
+      <div class="contact-cta-buttons">
+        <a href="sms:+17788882093" class="btn btn-primary btn-lg">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span>Text Kirk</span>
+        </a>
+        <a href="https://wa.me/17788882093?text=Hi%20Kirk%2C%20I'm%20interested%20in%20a%20vehicle" target="_blank" rel="noopener noreferrer" class="btn btn-outline-white btn-lg">
+          <span>WhatsApp Chat</span>
+        </a>
+        <a href="tel:+17788882093" class="btn btn-outline-white btn-lg">
+          <span>Call (778) 888-2093</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* Hero Section */
+  .hero-section {
+    background-color: var(--dark-base);
+    color: var(--text-inverse);
+    padding: 28px 0 48px;
+    border-bottom: 1px solid var(--border-dark);
+  }
+
+  .hero-top {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .hero-top {
+      grid-template-columns: minmax(0, 1fr) clamp(320px, 30vw, 400px);
+      gap: clamp(32px, 4vw, 56px);
+    }
+  }
+
+  .hero-estimator-row {
+    margin-top: 24px;
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+  }
+
+  .hero-badge {
+    align-self: flex-start;
+  }
+
+  .hero-title {
+    font-size: clamp(34px, 4.4vw, 52px);
+    line-height: 1.02;
+    font-weight: 800;
+  }
+
+  .highlight-text {
+    color: var(--amber);
+  }
+
+  .hero-subtitle {
+    font-size: 18px;
+    color: #CBD5E1;
+    line-height: 1.45;
+    max-width: 580px;
+  }
+
+  .hero-guarantee-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #F1F5F9;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+  }
+
+  /* Hero Aside Slideshow Card */
+  .hero-kirk-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--dark-surface);
+    border: 1px solid var(--border-dark);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  /* Side by side: the photo takes the headline column's height, never more */
+  @media (min-width: 900px) {
+    .hero-top {
+      align-items: stretch;
+    }
+
+    .hero-content {
+      justify-content: center;
+    }
+
+    .hero-kirk-card {
+      position: relative;
+      min-height: 240px;
+    }
+
+    .hero-kirk-card > :global(.slideshow) {
+      position: absolute;
+      inset: 0;
+    }
+  }
+
+  /* Stacked below 900px: a short landscape photo so the estimator isn't pushed far down */
+  @media (max-width: 899px) {
+    .hero-kirk-card {
+      width: 100%;
+      max-width: 520px;
+      justify-self: center;
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  /* Inventory Section */
+  .inventory-section {
+    padding: 64px 0;
+  }
+
+  .section-top-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 20px;
+    margin-bottom: 36px;
+  }
+
+  .section-heading {
+    font-size: clamp(34px, 5vw, 48px);
+    margin-top: 4px;
+  }
+
+  .section-sub {
+    font-size: 17px;
+    color: var(--text-muted);
+    max-width: 640px;
+    margin-top: 6px;
+  }
+
+  .vehicles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+  }
+
+  .custom-request-card {
+    background: var(--dark-base);
+    color: var(--text-inverse);
+    border-radius: var(--radius-md);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .request-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .request-title {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #FFFFFF;
+  }
+
+  .request-desc {
+    font-size: 16px;
+    color: #CBD5E1;
+    line-height: 1.5;
+  }
+
+  /* Split Funnel Section */
+  .split-funnel-section {
+    padding: 64px 0;
+    background: #FAF8F5;
+  }
+
+  .split-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+  }
+
+  .funnel-card {
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .green-card {
+    background-color: var(--accent);
+    color: #FFFFFF;
+  }
+
+  .white-card {
+    background-color: #FFFFFF;
+    border: 1px solid var(--border-light);
+    color: var(--text-main);
+  }
+
+  .badge-pill {
+    align-self: flex-start;
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .badge-pill.light {
+    background: rgba(255, 255, 255, 0.15);
+    color: #FFFFFF;
+  }
+
+  .badge-pill.dark {
+    background: var(--bg-surface-subtle);
+    color: var(--dark-base);
+  }
+
+  .funnel-title {
+    font-size: clamp(32px, 4vw, 42px);
+    line-height: 1.05;
+  }
+
+  .funnel-text {
+    font-size: 17px;
+    line-height: 1.5;
+    opacity: 0.9;
+  }
+
+  .funnel-reassurance {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    line-height: 1.45;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+  }
+
+  .trade-features {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #374151;
+  }
+
+  /* Meet Kirk Spotlight */
+  .meet-kirk-spotlight {
+    padding: 64px 0;
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+    background: #EFECE6;
+  }
+
+  .spotlight-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .spotlight-visual {
+    flex: 0 0 260px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .spotlight-avatar {
+    width: 140px;
+    height: 140px;
+    border-radius: var(--radius-full);
+    background: #D8D2C6;
+    color: #4A5568;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #FFFFFF;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .spotlight-tag {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .spotlight-text {
+    flex: 1 1 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .spotlight-heading {
+    font-size: clamp(32px, 5vw, 46px);
+  }
+
+  .spotlight-body {
+    font-size: 17px;
+    line-height: 1.6;
+    color: #374151;
+  }
+
+  .spotlight-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 6px;
+  }
+
+  /* Quick Contact Section */
+  .quick-contact-section {
+    background-color: var(--dark-base);
+    color: var(--text-inverse);
+    padding: 56px 0;
+    border-top: 1px solid var(--border-dark);
+  }
+
+  .quick-contact-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .contact-lead {
+    flex: 1 1 450px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .contact-heading {
+    font-size: clamp(32px, 4.5vw, 46px);
+    line-height: 1.05;
+  }
+
+  .contact-sub {
+    font-size: 17px;
+    color: #94A3B8;
+  }
+
+  .contact-cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+</style>

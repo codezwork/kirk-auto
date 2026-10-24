@@ -1,0 +1,320 @@
+---
+import Layout from '../layouts/Layout.astro';
+import VehicleCard from '../components/VehicleCard.astro';
+import { VEHICLES } from '../data/vehicles';
+
+const newcomerPicks = VEHICLES.filter(v => v.price <= 22000).slice(0, 3);
+---
+
+<Layout
+  title="Car Loans for Newcomers to Canada in BC | Work Permit & PR Welcome | Kirk Auto"
+  description="Just arrived in British Columbia? Get approved for a dependable used car without Canadian credit history. Work permits, PR, and international students welcome. Doorstep BC delivery."
+>
+  <div class="seo-landing-page">
+    <!-- Hero -->
+    <header class="landing-hero">
+      <div class="container hero-inner">
+        <span class="badge-amber">Newcomer Auto Financing BC</span>
+        <h1 class="landing-title font-heading">
+          New to Canada? <span class="highlight">Get approved for a car without Canadian credit.</span>
+        </h1>
+        <p class="landing-lead">
+          Just landed in Vancouver, Surrey, or the Fraser Valley on a work permit or permanent residency? Most dealerships tell you to wait 2 years to build credit. Kirk works with Canadian lenders who approve newcomers based on your current job and income.
+        </p>
+
+        <div class="hero-actions">
+          <a href="/pre-approval?situation=newcomer" class="btn btn-primary btn-lg">
+            Start 2-Minute Pre-Approval →
+          </a>
+          <a href="sms:+17788882093?body=Hi%20Kirk%2C%20I'm%20new%20to%20Canada%20and%20looking%20for%20a%20car" class="btn btn-outline-white btn-lg">
+            Text Kirk Your Questions
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Document Checklist -->
+    <section class="checklist-section">
+      <div class="container">
+        <div class="section-title-wrap text-center">
+          <span class="badge-green">Simple Requirements</span>
+          <h2 class="section-heading font-heading">What You Need to Get Approved as a Newcomer</h2>
+          <p class="section-sub">You don't need years of Canadian credit cards. Here is all we typically need to get you driving:</p>
+        </div>
+
+        <div class="checklist-grid">
+          <div class="check-card card">
+            <div class="check-num font-heading">01</div>
+            <h3 class="check-title">Status in Canada</h3>
+            <p class="check-desc">Valid Work Permit, Permanent Resident (PR) card, or Study Permit. Even if your permit is recent, we have options.</p>
+          </div>
+
+          <div class="check-card card">
+            <div class="check-num font-heading">02</div>
+            <h3 class="check-title">Proof of Employment</h3>
+            <p class="check-desc">A signed Canadian job offer letter, recent paystubs, or bank statements showing steady deposits in BC.</p>
+          </div>
+
+          <div class="check-card card">
+            <div class="check-num font-heading">03</div>
+            <h3 class="check-title">Driver's License</h3>
+            <p class="check-desc">BC Driver's License (Class 5 or 7L/7N), or your valid international/home country license while converting with ICBC.</p>
+          </div>
+
+          <div class="check-card card">
+            <div class="check-num font-heading">04</div>
+            <h3 class="check-title">Void Cheque / Direct Deposit</h3>
+            <p class="check-desc">A direct deposit form from your Canadian bank account (RBC, TD, Scotiabank, BMO, CIBC, or credit union).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Kirk Beats Franchise Dealers for Newcomers -->
+    <section class="comparison-section">
+      <div class="container">
+        <div class="section-title-wrap text-center">
+          <span class="badge-amber">The Difference</span>
+          <h2 class="section-heading font-heading">Franchise Dealers vs. Kirk Auto for Newcomers</h2>
+        </div>
+
+        <div class="compare-table-card card">
+          <div class="compare-row header-row">
+            <div class="compare-col factor">Feature</div>
+            <div class="compare-col big-dealer">Typical Franchise Dealer</div>
+            <div class="compare-col kirk-col">Kirk Auto</div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-col factor">Canadian Credit History</div>
+            <div class="compare-col big-dealer">Requires 1–2 years or high interest</div>
+            <div class="compare-col kirk-col"><strong>Zero Canadian credit required</strong></div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-col factor">Down Payment Required</div>
+            <div class="compare-col big-dealer">Usually demands $3,000–$5,000 cash</div>
+            <div class="compare-col kirk-col"><strong>$0 down options available OAC</strong></div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-col factor">Pricing Transparency</div>
+            <div class="compare-col big-dealer">Hidden $1,200+ doc fees added at desk</div>
+            <div class="compare-col kirk-col"><strong>All-in total price listed upfront</strong></div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-col factor">Communication</div>
+            <div class="compare-col big-dealer">4 hours waiting in a finance office</div>
+            <div class="compare-col kirk-col"><strong>Direct text communication with the owner</strong></div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-col factor">Delivery</div>
+            <div class="compare-col big-dealer">Pick up on the lot only</div>
+            <div class="compare-col kirk-col"><strong>Delivered to your door in BC</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ideal Vehicles for Newcomers -->
+    <section class="ideal-cars-section">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="badge-amber">Popular With New Arrivals</span>
+          <h2 class="section-heading font-heading">Recommended Vehicles for Newcomers</h2>
+          <p class="section-sub">Reliable, low maintenance, excellent fuel economy, and strong resale value that Canadian banks love to finance.</p>
+        </div>
+
+        <div class="vehicles-grid">
+          {newcomerPicks.map(v => (
+            <VehicleCard vehicle={v} />
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-banner">
+      <div class="container text-center">
+        <h2 class="cta-banner-title font-heading">Ready to get your wheels in BC?</h2>
+        <p class="cta-banner-lead">Send Kirk a text or start your 2-minute soft pre-approval today.</p>
+        <div class="banner-buttons">
+          <a href="/pre-approval?situation=newcomer" class="btn btn-primary btn-lg">Get Pre-Approved as a Newcomer →</a>
+          <a href="sms:+17788882093?body=Hi%20Kirk%2C%20I'm%20new%20to%20BC%20and%20had%20a%20question%20about%20getting%20a%20car" class="btn btn-outline-white btn-lg">Text Kirk Directly</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .seo-landing-page {
+    padding-bottom: 72px;
+  }
+
+  .landing-hero {
+    background-color: var(--dark-base);
+    color: var(--text-inverse);
+    padding: 64px 0 72px;
+    border-bottom: 1px solid var(--border-dark);
+  }
+
+  .hero-inner {
+    max-width: 820px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .landing-title {
+    font-size: clamp(38px, 6vw, 58px);
+    line-height: 1.05;
+  }
+
+  .highlight {
+    color: var(--amber);
+  }
+
+  .landing-lead {
+    font-size: 19px;
+    line-height: 1.6;
+    color: #CBD5E1;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 10px;
+  }
+
+  /* Checklist */
+  .checklist-section {
+    padding: 72px 0;
+    background: #FAF8F5;
+  }
+
+  .section-title-wrap {
+    margin-bottom: 40px;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .section-heading {
+    font-size: clamp(32px, 5vw, 44px);
+    margin-top: 4px;
+  }
+
+  .section-sub {
+    font-size: 17px;
+    color: var(--text-muted);
+    max-width: 620px;
+    margin: 8px auto 0;
+  }
+
+  .checklist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+  }
+
+  .check-card {
+    padding: 28px;
+    background: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .check-num {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .check-title {
+    font-size: 18px;
+    color: var(--text-main);
+  }
+
+  .check-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* Comparison */
+  .comparison-section {
+    padding: 72px 0;
+  }
+
+  .compare-table-card {
+    background: #FFFFFF;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .compare-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: 14px;
+    align-items: center;
+  }
+
+  .header-row {
+    background: #FAF8F5;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text-main);
+  }
+
+  .compare-col.kirk-col {
+    color: var(--accent);
+  }
+
+  .compare-col.big-dealer {
+    color: #64748B;
+  }
+
+  /* Ideal cars */
+  .ideal-cars-section {
+    padding: 72px 0;
+    background: #FAF8F5;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .vehicles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    margin-top: 32px;
+  }
+
+  /* CTA Banner */
+  .cta-banner {
+    background-color: var(--dark-base);
+    color: var(--text-inverse);
+    padding: 64px 0;
+  }
+
+  .cta-banner-title {
+    font-size: clamp(34px, 5vw, 48px);
+  }
+
+  .cta-banner-lead {
+    font-size: 18px;
+    color: #CBD5E1;
+    margin: 10px auto 24px;
+  }
+
+  .banner-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+  }
+</style>

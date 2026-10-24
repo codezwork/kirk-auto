@@ -1,0 +1,233 @@
+---
+import Layout from '../layouts/Layout.astro';
+import VehicleCard from '../components/VehicleCard.astro';
+import { VEHICLES } from '../data/vehicles';
+
+const rebuildPicks = VEHICLES.filter(v => v.price <= 21000).slice(0, 3);
+---
+
+<Layout
+  title="Car Loans After Consumer Proposal & Bankruptcy in BC | Kirk Auto"
+  description="Can you get a car loan while in a consumer proposal or after bankruptcy in BC? Yes. Kirk works with specialized lenders who finance based on your current income. No judgment."
+>
+  <div class="seo-landing-page">
+    <header class="landing-hero">
+      <div class="container hero-inner">
+        <span class="badge-amber">Credit Rebuilding in BC</span>
+        <h1 class="landing-title font-heading">
+          Car loans after a <span class="highlight">consumer proposal or bankruptcy in BC.</span>
+        </h1>
+        <p class="landing-lead">
+          A past proposal or bankruptcy doesn't disqualify you from owning a dependable vehicle. Kirk partners with specialized Canadian lenders who approve auto loans based on your current income, not past discharge dates.
+        </p>
+
+        <div class="hero-actions">
+          <a href="/pre-approval?situation=proposal" class="btn btn-primary btn-lg">
+            Check Proposal Pre-Approval →
+          </a>
+          <a href="sms:+17788882093?body=Hi%20Kirk%2C%20I%20have%20a%20consumer%20proposal%20and%20wanted%20to%20see%20if%20I%20qualify%20for%20a%20car" class="btn btn-outline-white btn-lg">
+            Text Kirk Confidentially
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Key Questions & Truths -->
+    <section class="faq-section">
+      <div class="container">
+        <div class="section-title-wrap text-center">
+          <span class="badge-green">Honest Answers</span>
+          <h2 class="section-heading font-heading">How Car Financing Works With a Proposal in BC</h2>
+        </div>
+
+        <div class="qa-grid">
+          <div class="qa-card card">
+            <h3 class="qa-title">Can I buy a car while still making proposal payments?</h3>
+            <p class="qa-text">
+              Yes. You do not need to wait until you are fully discharged. Many lenders will approve your auto loan as long as you've made your proposal payments on time for at least 2–3 months and have steady, verifiable income.
+            </p>
+          </div>
+
+          <div class="qa-card card">
+            <h3 class="qa-title">Will a car loan rebuild my credit score?</h3>
+            <p class="qa-text">
+              An automotive installment loan is one of the fastest credit-rebuilding tools recognized by Equifax and TransUnion Canada. Consistent bi-weekly on-time payments report positive tradeline data every month, accelerating your recovery.
+            </p>
+          </div>
+
+          <div class="qa-card card">
+            <h3 class="qa-title">Do I need permission from my Licensed Insolvency Trustee?</h3>
+            <p class="qa-text">
+              In most standard consumer proposals in BC, you do not require a formal court order to take on an auto loan, provided the monthly payments fit within your surplus income. We make sure the financing is structured affordably so your trustee has zero concerns.
+            </p>
+          </div>
+
+          <div class="qa-card card">
+            <h3 class="qa-title">Does applying here show up as another hard hit on my bureau?</h3>
+            <p class="qa-text">
+              No. Kirk reviews your file informally first. We discuss which vehicle and payments work before running any formal credit application with the lender.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rebuild Inventory Picks -->
+    <section class="cars-section">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="badge-amber">Smart Rebuild Options</span>
+          <h2 class="section-heading font-heading">Affordable Inventory Under $22,000</h2>
+          <p class="section-sub">Lower loan amounts equal higher approval rates and lower bi-weekly payments.</p>
+        </div>
+
+        <div class="vehicles-grid">
+          {rebuildPicks.map(v => (
+            <VehicleCard vehicle={v} />
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Banner -->
+    <section class="cta-banner">
+      <div class="container text-center">
+        <h2 class="cta-banner-title font-heading">Get an honest second chance with your vehicle.</h2>
+        <p class="cta-banner-lead">Kirk talks to you with zero judgment and transparent total numbers.</p>
+        <div class="banner-buttons">
+          <a href="/pre-approval?situation=proposal" class="btn btn-primary btn-lg">Start Proposal Pre-Approval →</a>
+          <a href="tel:+17788882093" class="btn btn-outline-white btn-lg">Call Kirk: (778) 888-2093</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .seo-landing-page {
+    padding-bottom: 72px;
+  }
+
+  .landing-hero {
+    background-color: var(--dark-base);
+    color: var(--text-inverse);
+    padding: 64px 0 72px;
+    border-bottom: 1px solid var(--border-dark);
+  }
+
+  .hero-inner {
+    max-width: 820px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .landing-title {
+    font-size: clamp(38px, 6vw, 58px);
+    line-height: 1.05;
+  }
+
+  .highlight {
+    color: var(--amber);
+  }
+
+  .landing-lead {
+    font-size: 19px;
+    line-height: 1.6;
+    color: #CBD5E1;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 10px;
+  }
+
+  /* FAQ */
+  .faq-section {
+    padding: 72px 0;
+    background: #FAF8F5;
+  }
+
+  .section-title-wrap {
+    margin-bottom: 40px;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .section-heading {
+    font-size: clamp(32px, 5vw, 44px);
+    margin-top: 4px;
+  }
+
+  .section-sub {
+    font-size: 17px;
+    color: var(--text-muted);
+    max-width: 620px;
+    margin: 8px 0 0;
+  }
+
+  .qa-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+  }
+
+  .qa-card {
+    padding: 28px;
+    background: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .qa-title {
+    font-size: 18px;
+    color: var(--text-main);
+  }
+
+  .qa-text {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  /* Cars */
+  .cars-section {
+    padding: 72px 0;
+  }
+
+  .vehicles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    margin-top: 32px;
+  }
+
+  /* CTA Banner */
+  .cta-banner {
+    background-color: var(--dark-base);
+    color: var(--text-inverse);
+    padding: 64px 0;
+  }
+
+  .cta-banner-title {
+    font-size: clamp(34px, 5vw, 48px);
+  }
+
+  .cta-banner-lead {
+    font-size: 18px;
+    color: #CBD5E1;
+    margin: 10px auto 24px;
+  }
+
+  .banner-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+  }
+</style>

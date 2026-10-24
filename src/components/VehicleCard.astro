@@ -1,0 +1,281 @@
+---
+import type { Vehicle } from '../data/vehicles';
+import { SITUATIONS, getPaymentRange, formatPrice } from '../data/situations';
+
+interface Props {
+  vehicle: Vehicle;
+}
+
+const { vehicle } = Astro.props;
+const defaultSit = SITUATIONS[0]; // Newcomer / rebuild base
+const estRange = getPaymentRange(vehicle.price, defaultSit, 84);
+---
+
+<article class="vehicle-card card">
+  <!-- Vehicle Image & Badge -->
+  <a href={`/inventory/${vehicle.slug}`} class="vehicle-media-link" aria-label={`View details for ${vehicle.year} ${vehicle.make} ${vehicle.model}`}>
+    <div class="vehicle-image-wrap">
+      <img
+        src={vehicle.images[0]}
+        alt={`${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim}`}
+        loading="lazy"
+        class="vehicle-img"
+      />
+      {vehicle.isLifted && (
+        <span class="vehicle-tag lifted-tag">3-Inch Lifted</span>
+      )}
+      {vehicle.isUnder25k && (
+        <span class="vehicle-tag price-tag">Under $25k</span>
+      )}
+    </div>
+  </a>
+
+  <!-- Vehicle Content -->
+  <div class="vehicle-body">
+    <div class="vehicle-header">
+      <span class="vehicle-year">{vehicle.year}</span>
+      <h3 class="vehicle-title">
+        <a href={`/inventory/${vehicle.slug}`}>
+          {vehicle.make} {vehicle.model} <span class="trim-text">{vehicle.trim}</span>
+        </a>
+      </h3>
+    </div>
+
+    <!-- Specs Badges -->
+    <div class="specs-row">
+      <span class="chip">{vehicle.km.toLocaleString('en-CA')} km</span>
+      <span class="chip">{vehicle.transmission.split(' ')[0]}</span>
+      <span class="chip">{vehicle.drivetrain}</span>
+    </div>
+
+    <!-- All-in Pricing & Legal Subtext -->
+    <div class="pricing-row">
+      <div class="price-val font-heading">{formatPrice(vehicle.price)}</div>
+      <div class="price-sub">All-in total price (only tax extra)</div>
+    </div>
+
+    <!-- Payment Estimate Widget -->
+    <div class="estimate-snippet">
+      <div class="est-header">
+        <span class="est-label">Est. Payment · {defaultSit.shortLabel}</span>
+      </div>
+      <div class="est-calc">
+        <span class="est-amount font-heading">{estRange}</span>
+        <span class="est-freq">every two weeks</span>
+      </div>
+      <span class="est-terms">84 mo · [8.99–13.99]% APR · $0 down OAC</span>
+    </div>
+
+    <!-- High-Converting CTAs -->
+    <div class="card-actions">
+      <!-- Walkaround Video Request -->
+      <a
+        href={`sms:+17788882093?body=Hi%20Kirk%2C%20could%20you%20send%20me%20a%20walkaround%20video%20of%20the%20${vehicle.year}%20${vehicle.make}%20${vehicle.model}%20(Stock%20${vehicle.stockNumber})%3F`}
+        class="btn btn-primary btn-video"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="23 7 16 12 23 17 23 7"></polygon>
+          <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+        </svg>
+        <span>Send walkaround video</span>
+      </a>
+
+      <!-- Viewing & Pre-Approval Split -->
+      <div class="action-grid">
+        <a href={`/inventory/${vehicle.slug}#book-viewing`} class="btn btn-outline btn-sm">
+          Book viewing
+        </a>
+        <a href={`/pre-approval?vehicleId=${vehicle.id}&price=${vehicle.price}`} class="btn btn-outline btn-sm">
+          See if I qualify
+        </a>
+      </div>
+    </div>
+  </div>
+</article>
+
+<style>
+  .vehicle-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #FFFFFF;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .vehicle-media-link {
+    display: block;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .vehicle-image-wrap {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    background-color: #E2DFD9;
+    overflow: hidden;
+  }
+
+  .vehicle-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .vehicle-card:hover .vehicle-img {
+    transform: scale(1.03);
+  }
+
+  .vehicle-tag {
+    position: absolute;
+    top: 12px;
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    z-index: 2;
+  }
+
+  .lifted-tag {
+    left: 12px;
+    background: var(--amber);
+    color: var(--dark-base);
+  }
+
+  .price-tag {
+    right: 12px;
+    background: rgba(20, 24, 29, 0.85);
+    color: #FFFFFF;
+    backdrop-filter: blur(4px);
+  }
+
+  .vehicle-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 12px;
+  }
+
+  .vehicle-year {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+
+  .vehicle-title {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-top: 2px;
+  }
+
+  .vehicle-title a {
+    color: var(--text-main);
+  }
+
+  .vehicle-title a:hover {
+    color: var(--accent);
+  }
+
+  .trim-text {
+    font-weight: 500;
+    font-size: 18px;
+    color: var(--text-muted);
+  }
+
+  .specs-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .pricing-row {
+    padding-top: 12px;
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .price-val {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--dark-base);
+  }
+
+  .price-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .estimate-snippet {
+    background: #F1EEE8;
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .est-header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .est-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+
+  .est-calc {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  .est-amount {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--dark-base);
+    line-height: 1.1;
+  }
+
+  .est-freq {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-main);
+  }
+
+  .est-terms {
+    font-size: 11px;
+    color: #6C7682;
+  }
+
+  .card-actions {
+    margin-top: auto;
+    padding-top: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn-video {
+    width: 100%;
+  }
+
+  .action-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+</style>

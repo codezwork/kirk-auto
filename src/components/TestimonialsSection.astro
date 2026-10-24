@@ -1,0 +1,154 @@
+---
+const reviews = [
+  {
+    quote: "I just moved to Vancouver on a work permit and every dealership wanted an insane interest rate or told me to come back after 2 years of credit history. Kirk listened, got me approved with a reputable bank in 24 hours, and dropped my Civic off right at my apartment in Surrey.",
+    author: "Harpreet S.",
+    location: "Surrey, BC",
+    badge: "Newcomer to Canada"
+  },
+  {
+    quote: "I had a consumer proposal on my file from 2 years ago and felt embarrassed even looking for a car. Kirk took all the stress away. He walked me through the numbers over text, showed me 3 vehicles that fit my budget, and didn't pull my credit until we both agreed on the payments.",
+    author: "Dave M.",
+    location: "Langley, BC",
+    badge: "Consumer Proposal Rebuild"
+  },
+  {
+    quote: "Found Kirk through Facebook for a lifted Ram 1500. He sent me a detailed 3-minute walkaround video showing every scratch and undercarriage detail before I even drove out to see it. Price was exactly what was on the website, zero hidden dealer fees.",
+    author: "Tyler K.",
+    location: "Abbotsford, BC",
+    badge: "Truck Buyer"
+  }
+];
+---
+
+<section class="reviews-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="header-left">
+        <span class="badge-amber">Customer Proof</span>
+        <h2 class="section-title font-heading">What BC Drivers Say</h2>
+      </div>
+      <div class="rating-summary">
+        <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+        <span class="rating-text"><strong>5.0 Stars</strong> on Google & Facebook (48+ reviews)</span>
+      </div>
+    </div>
+
+    <div class="reviews-grid">
+      {reviews.map((rev) => (
+        <figure class="review-card card">
+          <div class="stars-gold">★★★★★</div>
+          <blockquote class="review-quote">
+            "{rev.quote}"
+          </blockquote>
+          <figcaption class="review-author-wrap">
+            <div class="author-details">
+              <span class="author-name">{rev.author}</span>
+              <span class="author-location">{rev.location}</span>
+            </div>
+            <span class="situation-badge">{rev.badge}</span>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .reviews-section {
+    padding: 64px 0;
+    background: #FAF8F5;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .section-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .section-title {
+    font-size: clamp(32px, 5vw, 44px);
+    margin-top: 4px;
+  }
+
+  .rating-summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    color: var(--text-muted);
+  }
+
+  .stars {
+    color: #D97706;
+    letter-spacing: 2px;
+  }
+
+  .reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+  }
+
+  .review-card {
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+  }
+
+  .stars-gold {
+    color: #D97706;
+    font-size: 18px;
+    letter-spacing: 3px;
+  }
+
+  .review-quote {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #2D3748;
+    flex-grow: 1;
+    font-style: normal;
+  }
+
+  .review-author-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 8px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .author-details {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .author-name {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text-main);
+  }
+
+  .author-location {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .situation-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: var(--radius-full);
+    background: var(--bg-surface-subtle);
+    color: var(--accent);
+  }
+</style>

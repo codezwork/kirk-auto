@@ -1,0 +1,249 @@
+---
+// Placeholder photos from Unsplash (free licence). Swap them for real delivery
+// photos of Kirk's buyers, taken with their permission, before launch.
+const slides = [
+  { src: '/images/deliveries/delivery-1.jpg', alt: 'Woman leaning on her sedan', position: '50% 35%' },
+  { src: '/images/deliveries/delivery-2.jpg', alt: 'Couple standing in front of their silver hatchback', position: '24% 50%' },
+  { src: '/images/deliveries/delivery-3.jpg', alt: 'Man standing in front of his red sedan', position: '50% 60%' },
+  { src: '/images/deliveries/delivery-4.jpg', alt: 'Couple loading bags into their blue hatchback', position: '62% 50%' },
+];
+---
+
+<section class="slideshow" aria-roledescription="carousel" aria-label="Recent deliveries" data-slideshow>
+  <div class="slideshow-frame">
+    {slides.map((slide, i) => (
+      <img
+        src={slide.src}
+        alt={slide.alt}
+        class:list={['slide', { 'is-active': i === 0 }]}
+        style={`object-position: ${slide.position}`}
+        loading={i === 0 ? 'eager' : 'lazy'}
+        aria-hidden={i === 0 ? undefined : 'true'}
+        data-slide
+      />
+    ))}
+    <span class="sample-tag">Sample photo</span>
+
+    <div class="slide-caption">
+      <div class="caption-text">
+        <strong>[First name], [City]</strong>
+        <span>[Situation] · [Car], delivered [month]</span>
+      </div>
+      <div class="caption-controls">
+        <button type="button" class="arrow-btn" aria-label="Previous photo" data-prev>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+        </button>
+        <div class="dots">
+          {slides.map((_, i) => (
+            <button
+              type="button"
+              class="dot-btn"
+              aria-label={`Show photo ${i + 1} of ${slides.length}`}
+              aria-pressed={i === 0 ? 'true' : 'false'}
+              data-dot={i}
+            >
+              <span class="dot"></span>
+            </button>
+          ))}
+        </div>
+        <button type="button" class="arrow-btn" aria-label="Next photo" data-next>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const INTERVAL_MS = 5000;
+
+  document.querySelectorAll<HTMLElement>('[data-slideshow]').forEach((root) => {
+    const slides = Array.from(root.querySelectorAll<HTMLImageElement>('[data-slide]'));
+    const dots = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-dot]'));
+    let current = 0;
+    let timer: number | undefined;
+
+    const show = (index: number) => {
+      current = (index + slides.length) % slides.length;
+      slides.forEach((slide, i) => {
+        const active = i === current;
+        slide.classList.toggle('is-active', active);
+        if (active) slide.removeAttribute('aria-hidden');
+        else slide.setAttribute('aria-hidden', 'true');
+      });
+      dots.forEach((dot, i) => dot.setAttribute('aria-pressed', String(i === current)));
+    };
+
+    const stop = () => {
+      window.clearInterval(timer);
+      timer = undefined;
+    };
+
+    const start = () => {
+      stop();
+      timer = window.setInterval(() => show(current + 1), INTERVAL_MS);
+    };
+
+    // Any tap on the controls hands control to the visitor for good.
+    let userTookOver = false;
+    const takeOver = (index: number) => {
+      userTookOver = true;
+      stop();
+      show(index);
+    };
+
+    root.querySelector('[data-prev]')?.addEventListener('click', () => takeOver(current - 1));
+    root.querySelector('[data-next]')?.addEventListener('click', () => takeOver(current + 1));
+    dots.forEach((dot, i) => dot.addEventListener('click', () => takeOver(i)));
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) return;
+
+    root.addEventListener('mouseenter', stop);
+    root.addEventListener('mouseleave', () => { if (!userTookOver) start(); });
+    root.addEventListener('focusin', stop);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stop();
+      else if (!userTookOver) start();
+    });
+
+    start();
+  });
+</script>
+
+<style>
+  /* Fills whatever box the page gives it (the hero card sets the size). */
+  .slideshow {
+    height: 100%;
+  }
+
+  .slideshow-frame {
+    container-type: size;
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    background: var(--dark-surface);
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+
+  .slide.is-active {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slide {
+      transition: none;
+    }
+  }
+
+  .sample-tag {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    background: rgba(11, 14, 18, 0.75);
+    color: var(--text-inverse);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .arrow-btn {
+    width: 36px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    background: none;
+    color: var(--text-inverse);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: color 0.2s ease;
+  }
+
+  .arrow-btn:hover {
+    color: var(--amber);
+  }
+
+  .caption-controls {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .slide-caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 8px 10px 16px;
+    background: rgba(11, 14, 18, 0.8);
+    color: var(--text-inverse);
+  }
+
+  .caption-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .caption-text strong {
+    font-size: 15px;
+  }
+
+  .caption-text span {
+    font-size: 13px;
+    color: #C9CED6;
+  }
+
+  .dots {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .dot-btn {
+    width: 24px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: #8A919B;
+    transition: background 0.2s ease;
+  }
+
+  .dot-btn[aria-pressed='true'] .dot {
+    background: var(--amber);
+  }
+
+  /* Short photo (side-by-side hero on smaller laptops): keep the caption to one line */
+  @container (max-height: 320px) {
+    .caption-text span {
+      display: none;
+    }
+  }
+</style>

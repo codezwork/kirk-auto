@@ -1,0 +1,268 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-content">
+    <div class="footer-grid">
+      <!-- Column 1: Brand & Contact -->
+      <div class="footer-col brand-col">
+        <a href="/" class="footer-logo">
+          <span class="logo-kirk">KIRK</span>
+          <span class="logo-auto">AUTO</span>
+        </a>
+        <p class="brand-desc">
+          Honest, personal vehicle sales in British Columbia. We specialize in cars under $25,000 and reliable trucks, with realistic financing options for newcomers, bad credit, and first-time buyers.
+        </p>
+        <div class="contact-snippets">
+          <div class="contact-row">
+            <span class="contact-label">Direct Line / Text:</span>
+            <a href="tel:+17788882093" class="contact-val">(778) 888-2093</a>
+          </div>
+          <div class="contact-row">
+            <span class="contact-label">Service Area:</span>
+            <span class="contact-val">Metro Vancouver & Fraser Valley</span>
+          </div>
+          <div class="contact-row">
+            <span class="contact-label">Hours:</span>
+            <span class="contact-val">Mon–Sat 9:00 AM – 7:00 PM (By Appt)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Column 2: Inventory Links -->
+      <div class="footer-col">
+        <h4 class="col-title">Inventory</h4>
+        <ul class="footer-links">
+          <li><a href="/inventory">View All Inventory</a></li>
+          <li><a href="/trucks">Used Trucks for Sale BC</a></li>
+          <li><a href="/inventory?type=car">Cars Under $25,000</a></li>
+          <li><a href="/inventory?type=suv">SUVs & Crossovers</a></li>
+          <li><a href="/trade-in">Value Your Trade-In</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 3: Financing & Situation Guides -->
+      <div class="footer-col">
+        <h4 class="col-title">Financing Programs</h4>
+        <ul class="footer-links">
+          <li><a href="/pre-approval">2-Minute Pre-Approval</a></li>
+          <li><a href="/new-to-canada">New to Canada Car Loans</a></li>
+          <li><a href="/consumer-proposal-car-loan">Car Loans After Proposal</a></li>
+          <li><a href="/first-car-no-credit">First Car / No Credit Loans</a></li>
+          <li><a href="/payment-calculator">BC Car Payment Calculator</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 4: About & Relationship -->
+      <div class="footer-col">
+        <h4 class="col-title">About Kirk</h4>
+        <ul class="footer-links">
+          <li><a href="/about-kirk">Meet Kirk (Owner Story)</a></li>
+          <li><a href="/about-kirk#why-kirk">How I Work & Guarantees</a></li>
+          <li><a href="/contact">Location & Hours</a></li>
+          <li><a href="sms:+17788882093">Text Kirk Directly</a></li>
+          <li><a href="https://wa.me/17788882093" target="_blank" rel="noopener noreferrer">WhatsApp Chat</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Compliance Disclosures (BC VSA Mandated) -->
+    <div class="compliance-box">
+      <div class="license-line">
+        <strong>Licensed BC Motor Dealer · Dealer #[XXXXX]</strong>
+        <span>All vehicle sales subject to Vehicle Sales Authority of BC (VSA) regulations.</span>
+      </div>
+      <p class="legal-text">
+        <strong>Total Price Advertising Disclosure:</strong> All advertised prices are total all-in prices, including documentation fee ($[XXX]) and all other dealer administration fees. Only applicable provincial and federal taxes (GST/PST) and vehicle licensing fees are extra. Vehicles are pre-owned and subject to prior sale.
+      </p>
+      <p class="legal-text">
+        <strong>Financing Disclaimer:</strong> Bi-weekly payment calculations displayed on this website are estimates for illustrative purposes only, not binding credit offers. Calculations assume $0 down payment, specified term (typically 84 months), and estimated annual percentage rate (APR) range, before applicable taxes, on approved credit (OAC). Actual interest rates, loan terms, and total finance charges are determined exclusively by the lending institution based on your finalized credit application, proof of income, and credit rating. Applying online does not initiate a hard credit check without your prior phone or in-person consent.
+      </p>
+    </div>
+
+    <!-- Copyright Sub-Footer -->
+    <div class="sub-footer">
+      <span>&copy; {currentYear} Kirk Auto. All rights reserved. Designed & built for BC drivers.</span>
+      <div class="sub-links">
+        <a href="/contact">Contact</a>
+        <span class="sub-divider">·</span>
+        <a href="/about-kirk">About</a>
+        <span class="sub-divider">·</span>
+        <a href="/pre-approval">Pre-Approval</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background-color: var(--dark-legal);
+    color: #9AA3AE;
+    font-size: 14px;
+    border-top: 1px solid var(--border-dark);
+    margin-top: auto;
+  }
+
+  .footer-content {
+    padding-top: 56px;
+    padding-bottom: 32px;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 36px;
+    margin-bottom: 48px;
+  }
+
+  @media (min-width: 900px) {
+    .footer-grid {
+      grid-template-columns: 1.8fr 1fr 1fr 1fr;
+    }
+  }
+
+  .footer-logo {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    font-family: var(--font-heading);
+    font-size: 30px;
+    margin-bottom: 12px;
+    text-decoration: none;
+  }
+
+  .logo-kirk {
+    font-weight: 800;
+    color: #FFFFFF;
+  }
+
+  .logo-auto {
+    font-weight: 700;
+    color: var(--amber);
+  }
+
+  .brand-desc {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    color: #8C96A2;
+    max-width: 380px;
+  }
+
+  .contact-snippets {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 13px;
+  }
+
+  .contact-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .contact-label {
+    color: #6C7682;
+  }
+
+  .contact-val {
+    color: #D1D5DB;
+    font-weight: 500;
+  }
+
+  .contact-val:hover {
+    color: #FFFFFF;
+  }
+
+  .col-title {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-weight: 700;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+  }
+
+  .footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer-links a {
+    color: #9AA3AE;
+    font-size: 14px;
+    transition: color 0.15s ease;
+  }
+
+  .footer-links a:hover {
+    color: #FFFFFF;
+    text-decoration: underline;
+  }
+
+  .compliance-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    margin-bottom: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .license-line {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 13px;
+    color: #E2E8F0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding-bottom: 10px;
+  }
+
+  .legal-text {
+    font-size: 12px;
+    line-height: 1.6;
+    color: #7A8490;
+  }
+
+  .legal-text strong {
+    color: #A3ABB6;
+  }
+
+  .sub-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    font-size: 12px;
+    color: #6C7682;
+  }
+
+  .sub-links {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .sub-links a {
+    color: #8C96A2;
+  }
+
+  .sub-links a:hover {
+    color: #FFFFFF;
+  }
+
+  .sub-divider {
+    color: #4A5568;
+  }
+</style>

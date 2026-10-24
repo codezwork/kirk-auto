@@ -1,0 +1,117 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import StickyMobileBar from '../components/StickyMobileBar.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  canonical?: string;
+  ogType?: string;
+}
+
+const {
+  title,
+  description = "Kirk Auto — Honest car sales and financing in Metro Vancouver & Fraser Valley for bad credit, newcomers, and first-time buyers. All-in pricing, zero surprises.",
+  canonical,
+  ogType = "website"
+} = Astro.props;
+
+const currentPath = Astro.url.pathname;
+const siteUrl = "https://kirkauto.ca";
+const canonicalUrl = canonical || new URL(currentPath, siteUrl).href;
+
+// Schema.org Structured Data for Local SEO
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "AutoDealer",
+  "name": "Kirk Auto",
+  "image": "https://kirkauto.ca/images/kirk-portrait.jpg",
+  "telephone": "+1-778-888-2093",
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Serving Metro Vancouver and Fraser Valley",
+    "addressLocality": "Surrey",
+    "addressRegion": "BC",
+    "postalCode": "V3T",
+    "addressCountry": "CA"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 49.1913,
+    "longitude": -122.8490
+  },
+  "url": "https://kirkauto.ca",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+      ],
+      "opens": "09:00",
+      "closes": "19:00"
+    }
+  ],
+  "areaServed": [
+    "Vancouver",
+    "Surrey",
+    "Burnaby",
+    "Richmond",
+    "Langley",
+    "Abbotsford",
+    "Coquitlam"
+  ]
+};
+---
+
+<!DOCTYPE html>
+<html lang="en-CA">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    
+    <!-- Primary SEO -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content="Kirk Auto" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalUrl} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+
+    <!-- Preconnect Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  </head>
+  <body>
+    <Header currentPath={currentPath} />
+    
+    <main id="main-content">
+      <slot />
+    </main>
+
+    <Footer />
+    <StickyMobileBar />
+  </body>
+</html>

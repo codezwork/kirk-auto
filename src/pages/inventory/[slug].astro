@@ -1,0 +1,664 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { VEHICLES, type Vehicle } from '../../data/vehicles';
+import { SITUATIONS, calculateBiWeekly, formatPrice } from '../../data/situations';
+
+export function getStaticPaths() {
+  return VEHICLES.map((vehicle) => ({
+    params: { slug: vehicle.slug },
+    props: { vehicle }
+  }));
+}
+
+interface Props {
+  vehicle: Vehicle;
+}
+
+const { vehicle } = Astro.props;
+
+// Calculate payment breakdown by credit situation
+const paymentScenarios = SITUATIONS.map((sit) => {
+  const lo = calculateBiWeekly(vehicle.price, sit.aprLo, 84);
+  const hi = calculateBiWeekly(vehicle.price, sit.aprHi, 84);
+  return {
+    label: sit.label,
+    aprRange: `[${sit.aprLo.toFixed(2)}–${sit.aprHi.toFixed(2)}]% APR`,
+    payment: `$${lo}–$${hi}`,
+  };
+});
+---
+
+<Layout
+  title={`${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim} for Sale in BC | Kirk Auto`}
+  description={`Buy this ${vehicle.year} ${vehicle.make} ${vehicle.model} ${vehicle.trim} for ${formatPrice(vehicle.price)} all-in. Clean title, inspected, with bad credit and newcomer financing available in BC.`}
+>
+  <div class="vdp-page container">
+    <!-- Breadcrumbs / Back link -->
+    <nav class="vdp-nav">
+      <a href="/inventory" class="back-link">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        <span>Back to all vehicles</span>
+      </a>
+      <span class="vdp-stock">Stock #{vehicle.stockNumber} · VIN: {vehicle.vin}</span>
+    </nav>
+
+    <!-- Main VDP Grid: Left Media, Right Buy/Finance Box -->
+    <div class="vdp-layout">
+      <!-- Left Column: Gallery & Details -->
+      <div class="vdp-main">
+        <!-- Vehicle Title Header -->
+        <div class="vdp-title-box">
+          <span class="vdp-eyebrow">{vehicle.year} {vehicle.make}</span>
+          <h1 class="vdp-heading font-heading">{vehicle.model} <span class="vdp-trim">{vehicle.trim}</span></h1>
+        </div>
+
+        <!-- Main Photo Gallery -->
+        <div class="gallery-wrapper card">
+          <div class="main-image-container">
+            <img
+              src={vehicle.images[0]}
+              alt={`${vehicle.year} ${vehicle.make} ${vehicle.model}`}
+              id="main-vdp-image"
+              class="vdp-hero-image"
+            />
+            {vehicle.isLifted && <span class="vdp-badge lifted">3-Inch Lifted</span>}
+            {vehicle.isUnder25k && <span class="vdp-badge under25k">Under $25k</span>}
+          </div>
+
+          {vehicle.images.length > 1 && (
+            <div class="thumbnails-row">
+              {vehicle.images.map((img, i) => (
+                <button
+                  type="button"
+                  class:list={['thumb-btn', { active: i === 0 }]}
+                  data-src={img}
+                  aria-label={`View photo ${i + 1}`}
+                >
+                  <img src={img} alt={`Thumbnail ${i + 1}`} />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <!-- Vehicle Description -->
+        <section class="vdp-section card">
+          <h2 class="section-subheading font-heading">Vehicle Overview</h2>
+          <p class="vdp-description-text">{vehicle.description}</p>
+        </section>
+
+        <!-- Key Features Checklist -->
+        <section class="vdp-section card">
+          <h2 class="section-subheading font-heading">Key Features & Equipment</h2>
+          <ul class="features-list">
+            {vehicle.features.map((feat) => (
+              <li class="feature-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1E5B47" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span>{feat}</span>
+              </li>
+            ))}
+            <li class="feature-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1E5B47" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span>150-Point BC Safety Certified & Mechanical Inspection</span>
+            </li>
+            <li class="feature-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1E5B47" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span>Verified Clean BC Title & Carfax History Report Available</span>
+            </li>
+          </ul>
+        </section>
+
+        <!-- Vehicle Specifications Grid -->
+        <section class="vdp-section card">
+          <h2 class="section-subheading font-heading">Detailed Specifications</h2>
+          <div class="specs-grid">
+            <div class="spec-cell">
+              <span class="spec-label">Odometer:</span>
+              <span class="spec-val">{vehicle.km.toLocaleString('en-CA')} km</span>
+            </div>
+            <div class="spec-cell">
+              <span class="spec-label">Body Style:</span>
+              <span class="spec-val" style="text-transform: capitalize;">{vehicle.bodyType}</span>
+            </div>
+            <div class="spec-cell">
+              <span class="spec-label">Drivetrain:</span>
+              <span class="spec-val">{vehicle.drivetrain}</span>
+            </div>
+            <div class="spec-cell">
+              <span class="spec-label">Transmission:</span>
+              <span class="spec-val">{vehicle.transmission}</span>
+            </div>
+            <div class="spec-cell">
+              <span class="spec-label">Fuel Type:</span>
+              <span class="spec-val">{vehicle.fuelType}</span>
+            </div>
+            <div class="spec-cell">
+              <span class="spec-label">Exterior Color:</span>
+              <span class="spec-val">{vehicle.exteriorColor}</span>
+            </div>
+            <div class="spec-cell">
+              <span class="spec-label">Interior Color:</span>
+              <span class="spec-val">{vehicle.interiorColor}</span>
+            </div>
+            <div class="spec-cell">
+              <span class="spec-label">Stock Number:</span>
+              <span class="spec-val">{vehicle.stockNumber}</span>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right Column: Pricing, Financing & Action Box -->
+      <aside class="vdp-sidebar">
+        <!-- Main Price Card -->
+        <div class="price-sidebar-card card">
+          <div class="price-header">
+            <span class="price-eyebrow">BC Total All-In Price</span>
+            <div class="price-main font-heading">{formatPrice(vehicle.price)}</div>
+            <p class="price-legal-notice">
+              Every dealer documentation fee is included. Only 12% BC taxes (PST/GST) and licensing are extra.
+            </p>
+          </div>
+
+          <!-- CTAs -->
+          <div class="sidebar-ctas">
+            <!-- Walkaround Video CTA -->
+            <a
+              href={`sms:+17788882093?body=Hi%20Kirk%2C%20can%20you%20send%20me%20a%20walkaround%20video%20of%20the%20${vehicle.year}%20${vehicle.make}%20${vehicle.model}%20(Stock%20${vehicle.stockNumber})%3F`}
+              class="btn btn-primary btn-lg full-btn"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+              </svg>
+              <span>Send Me a Walkaround Video</span>
+            </a>
+
+            <!-- Pre-Approval CTA -->
+            <a
+              href={`/pre-approval?vehicleId=${vehicle.id}&price=${vehicle.price}`}
+              class="btn btn-amber btn-lg full-btn"
+            >
+              <span>See If I Qualify For This Car</span>
+            </a>
+
+            <!-- Viewing Anchor -->
+            <a href="#book-viewing" class="btn btn-outline full-btn">
+              <span>Book a Viewing / Test Drive</span>
+            </a>
+          </div>
+
+          <!-- Payment Breakdown Card -->
+          <div class="payment-breakdown-box">
+            <h3 class="breakdown-title">Estimated Bi-Weekly Payments:</h3>
+            <div class="scenario-table">
+              {paymentScenarios.map((sc) => (
+                <div class="scenario-row">
+                  <span class="scenario-name">{sc.label}</span>
+                  <div class="scenario-numbers">
+                    <span class="scenario-pay font-heading">{sc.payment}</span>
+                    <span class="scenario-bi">/2 wks</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <span class="breakdown-disclaimer">
+              Calculated on 84 months, $0 down, OAC. Applying doesn't affect your credit.
+            </span>
+          </div>
+
+          <!-- Delivery Guarantee -->
+          <div class="delivery-guarantee">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="delivery-icon">
+              <rect x="1" y="3" width="15" height="13"></rect>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+              <circle cx="5.5" cy="18.5" r="2.5"></circle>
+              <circle cx="18.5" cy="18.5" r="2.5"></circle>
+            </svg>
+            <div>
+              <strong>Doorstep Delivery Available</strong>
+              <p>We bring this vehicle directly to your driveway in Metro Vancouver or Fraser Valley.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Booking Form Card -->
+        <div class="booking-card card" id="book-viewing">
+          <h3 class="booking-title font-heading">Book a Private Viewing</h3>
+          <p class="booking-sub">Kirk will confirm your time and have the vehicle sanitized and ready.</p>
+
+          <form action="/contact#sent" method="GET" class="vdp-form">
+            <input type="hidden" name="vehicle" value={`${vehicle.year} ${vehicle.make} ${vehicle.model} (Stock ${vehicle.stockNumber})`} />
+            
+            <div class="form-group">
+              <label for="book-name" class="form-label">Your Name</label>
+              <input type="text" id="book-name" name="name" required class="form-input" placeholder="e.g. David Singh" />
+            </div>
+
+            <div class="form-group">
+              <label for="book-phone" class="form-label">Phone Number (for SMS confirmation)</label>
+              <input type="tel" id="book-phone" name="phone" required class="form-input" placeholder="(778) 888-2093" />
+            </div>
+
+            <div class="form-group">
+              <label for="book-date" class="form-label">Preferred Date & Time</label>
+              <input type="text" id="book-date" name="preferred_time" class="form-input" placeholder="e.g. Tomorrow afternoon at 2pm" />
+            </div>
+
+            <button type="submit" class="btn btn-dark full-btn">
+              Request Appointment With Kirk
+            </button>
+          </form>
+        </div>
+      </aside>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  function setupGallery() {
+    const mainImg = document.getElementById('main-vdp-image') as HTMLImageElement;
+    const thumbBtns = document.querySelectorAll<HTMLButtonElement>('.thumb-btn');
+
+    if (!mainImg || thumbBtns.length === 0) return;
+
+    thumbBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        thumbBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const newSrc = btn.dataset.src;
+        if (newSrc) {
+          mainImg.src = newSrc;
+        }
+      });
+    });
+  }
+
+  setupGallery();
+  document.addEventListener('astro:page-load', setupGallery);
+</script>
+
+<style>
+  .vdp-page {
+    padding-top: 28px;
+    padding-bottom: 72px;
+  }
+
+  .vdp-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--accent);
+  }
+
+  .back-link:hover {
+    text-decoration: underline;
+  }
+
+  .vdp-stock {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-family: ui-monospace, monospace;
+  }
+
+  .vdp-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  @media (min-width: 960px) {
+    .vdp-layout {
+      grid-template-columns: 1.4fr 1fr;
+    }
+  }
+
+  .vdp-main {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .vdp-title-box {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .vdp-eyebrow {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .vdp-heading {
+    font-size: clamp(34px, 5vw, 48px);
+    line-height: 1.05;
+  }
+
+  .vdp-trim {
+    font-weight: 500;
+    color: var(--text-muted);
+  }
+
+  /* Gallery */
+  .gallery-wrapper {
+    background: #FFFFFF;
+    overflow: hidden;
+  }
+
+  .main-image-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background: #E2DFD9;
+    overflow: hidden;
+  }
+
+  .vdp-hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .vdp-badge {
+    position: absolute;
+    top: 14px;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .vdp-badge.lifted {
+    left: 14px;
+    background: var(--amber);
+    color: var(--dark-base);
+  }
+
+  .vdp-badge.under25k {
+    right: 14px;
+    background: rgba(20, 24, 29, 0.85);
+    color: #FFFFFF;
+  }
+
+  .thumbnails-row {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    background: #FAF8F5;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .thumb-btn {
+    width: 80px;
+    height: 56px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    opacity: 0.7;
+    transition: all 0.15s ease;
+  }
+
+  .thumb-btn.active, .thumb-btn:hover {
+    opacity: 1;
+    border-color: var(--accent);
+  }
+
+  .thumb-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Section cards */
+  .vdp-section {
+    padding: 28px;
+    background: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .section-subheading {
+    font-size: 24px;
+  }
+
+  .vdp-description-text {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #374151;
+  }
+
+  .features-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px;
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 15px;
+    color: #2D3748;
+    line-height: 1.4;
+  }
+
+  .feature-item svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .specs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+  }
+
+  .spec-cell {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 12px;
+    background: #FAF8F5;
+    border-radius: var(--radius-sm);
+  }
+
+  .spec-label {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .spec-val {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+
+  /* Sidebar */
+  .vdp-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .price-sidebar-card {
+    padding: 28px;
+    background: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: sticky;
+    top: 90px;
+  }
+
+  .price-header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 16px;
+  }
+
+  .price-eyebrow {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .price-main {
+    font-size: 42px;
+    font-weight: 800;
+    color: var(--dark-base);
+    line-height: 1;
+  }
+
+  .price-legal-notice {
+    font-size: 12px;
+    line-height: 1.4;
+    color: #6C7682;
+    margin-top: 4px;
+  }
+
+  .sidebar-ctas {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .full-btn {
+    width: 100%;
+  }
+
+  .payment-breakdown-box {
+    background: #FAF8F5;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .breakdown-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+
+  .scenario-table {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .scenario-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 13px;
+    border-bottom: 1px dashed var(--border-subtle);
+    padding-bottom: 4px;
+  }
+
+  .scenario-name {
+    color: #4A5568;
+    font-weight: 500;
+  }
+
+  .scenario-numbers {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+  }
+
+  .scenario-pay {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--dark-base);
+  }
+
+  .scenario-bi {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .breakdown-disclaimer {
+    font-size: 11px;
+    color: #718096;
+    line-height: 1.35;
+  }
+
+  .delivery-guarantee {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #2D3748;
+    background: var(--accent-light);
+    padding: 12px;
+    border-radius: var(--radius-sm);
+  }
+
+  .delivery-icon {
+    color: var(--accent);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* Booking form */
+  .booking-card {
+    padding: 24px;
+    background: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .booking-title {
+    font-size: 22px;
+  }
+
+  .booking-sub {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  .vdp-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 6px;
+  }
+</style>

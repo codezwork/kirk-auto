@@ -1,0 +1,337 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Trade-In Your Vehicle in BC | Real Market Appraisal | Kirk Auto"
+  description="Get a fair, real-market trade-in offer on your car or truck in British Columbia. Save on BC sales tax when applying your trade toward your next vehicle."
+>
+  <div class="tradein-page container">
+    <div class="tradein-header text-center">
+      <span class="badge-amber">Fair & Transparent Appraisals</span>
+      <h1 class="page-title font-heading">What's Your Current Vehicle Worth?</h1>
+      <p class="page-subtitle">
+        Send Kirk your car's details and condition. He pulls real-time British Columbia market sales comps to give you a genuine trade offer you can apply straight toward your next vehicle.
+      </p>
+    </div>
+
+    <!-- 3 Key Perks of Trading in BC -->
+    <div class="perks-row">
+      <div class="perk-card card">
+        <div class="perk-icon font-heading">12%</div>
+        <div class="perk-body">
+          <strong class="perk-title">Instant BC Sales Tax Savings</strong>
+          <span class="perk-desc">In BC, your trade-in value is deducted before PST/GST is calculated. A $10,000 trade saves you $1,200 in pure tax.</span>
+        </div>
+      </div>
+
+      <div class="perk-card card">
+        <div class="perk-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <div class="perk-body">
+          <strong class="perk-title">Existing Loans Handled</strong>
+          <span class="perk-desc">Still owe money to a bank or lender? Kirk handles the loan payoff directly and rolls any positive or negative equity into your next deal.</span>
+        </div>
+      </div>
+
+      <div class="perk-card card">
+        <div class="perk-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+        </div>
+        <div class="perk-body">
+          <strong class="perk-title">Text Kirk a Few Photos</strong>
+          <span class="perk-desc">No need to drive to a lot and wait for 2 hours. Send photos of the exterior, interior, and odometer by text for a preliminary number.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trade-In Form Wrapper -->
+    <div class="form-container card">
+      <form id="tradein-form" class="tradein-form" onsubmit="event.preventDefault();">
+        <h2 class="form-section-title font-heading">1. Tell Kirk About Your Vehicle</h2>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="car-year" class="form-label">Year *</label>
+            <input type="number" id="car-year" name="year" required class="form-input" placeholder="e.g. 2016" min="1995" max="2027" />
+          </div>
+
+          <div class="form-group">
+            <label for="car-make" class="form-label">Make *</label>
+            <input type="text" id="car-make" name="make" required class="form-input" placeholder="e.g. Honda, Ford, Toyota" />
+          </div>
+
+          <div class="form-group">
+            <label for="car-model" class="form-label">Model *</label>
+            <input type="text" id="car-model" name="model" required class="form-input" placeholder="e.g. Civic, F-150, RAV4" />
+          </div>
+
+          <div class="form-group">
+            <label for="car-trim" class="form-label">Trim / Edition</label>
+            <input type="text" id="car-trim" name="trim" class="form-input" placeholder="e.g. LX, XLT, Sport" />
+          </div>
+
+          <div class="form-group">
+            <label for="car-km" class="form-label">Kilometers (Odometer) *</label>
+            <input type="text" id="car-km" name="km" required class="form-input" placeholder="e.g. 115,000 km" />
+          </div>
+
+          <div class="form-group">
+            <label for="car-condition" class="form-label">Overall Condition</label>
+            <select id="car-condition" name="condition" class="form-select">
+              <option value="clean">Clean / Excellent (No body damage, runs great)</option>
+              <option value="average" selected>Average (Minor scratches/dings, runs well)</option>
+              <option value="rough">Rough (Needs mechanical or body repairs)</option>
+            </select>
+          </div>
+        </div>
+
+        <h2 class="form-section-title font-heading" style="margin-top: 32px;">2. Loan Status & Ownership</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="loan-status" class="form-label">Is this vehicle currently financed?</label>
+            <select id="loan-status" name="loan_status" class="form-select">
+              <option value="paid_off">Paid off in full (Clean title in hand)</option>
+              <option value="has_loan">Still has a bank loan or balance owing</option>
+              <option value="leased">Currently leased</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="estimated-payoff" class="form-label">Approximate Loan Balance (if applicable)</label>
+            <input type="text" id="estimated-payoff" name="loan_balance" class="form-input" placeholder="e.g. $4,500 or N/A" />
+          </div>
+        </div>
+
+        <h2 class="form-section-title font-heading" style="margin-top: 32px;">3. Your Contact Details</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="trade-name" class="form-label">Your Full Name *</label>
+            <input type="text" id="trade-name" name="name" required class="form-input" placeholder="e.g. Harpreet Singh" />
+          </div>
+
+          <div class="form-group">
+            <label for="trade-phone" class="form-label">Mobile Phone Number (for text appraisal) *</label>
+            <input type="tel" id="trade-phone" name="phone" required class="form-input" placeholder="(778) 888-2093" />
+          </div>
+
+          <div class="form-group">
+            <label for="trade-email" class="form-label">Email Address *</label>
+            <input type="email" id="trade-email" name="email" required class="form-input" placeholder="name@example.com" />
+          </div>
+
+          <div class="form-group">
+            <label for="trade-city" class="form-label">City in BC</label>
+            <input type="text" id="trade-city" name="city" class="form-input" placeholder="e.g. Surrey, Abbotsford, Vancouver" />
+          </div>
+        </div>
+
+        <div class="form-action-row">
+          <button type="submit" class="btn btn-primary btn-lg" id="submit-trade-btn">
+            Get My Trade-In Value From Kirk →
+          </button>
+          <a href="sms:+17788882093?body=Hi%20Kirk%2C%20I%20have%20a%20car%20I%20want%20to%20trade%20in" class="direct-text-link">
+            or text Kirk photos directly instead →
+          </a>
+        </div>
+
+        <!-- Success Message -->
+        <div class="trade-success" id="trade-success" style="display: none;">
+          <div class="success-icon">✓</div>
+          <h3 class="success-title font-heading">Trade Details Received!</h3>
+          <p class="success-text">
+            Kirk is checking recent BC auction records and retail comps for your vehicle. He will text you a preliminary valuation within 30 minutes during business hours.
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  function setupTradeIn() {
+    const form = document.getElementById('tradein-form');
+    const submitBtn = document.getElementById('submit-trade-btn');
+    const successBox = document.getElementById('trade-success');
+
+    if (submitBtn && form) {
+      submitBtn.addEventListener('click', () => {
+        const required = form.querySelectorAll<HTMLInputElement>('[required]');
+        let valid = true;
+        required.forEach(inp => {
+          if (!inp.value.trim()) valid = false;
+        });
+
+        if (valid && successBox) {
+          successBox.style.display = 'block';
+          submitBtn.style.display = 'none';
+          window.scrollTo({ top: 300, behavior: 'smooth' });
+        }
+      });
+    }
+  }
+
+  setupTradeIn();
+  document.addEventListener('astro:page-load', setupTradeIn);
+</script>
+
+<style>
+  .tradein-page {
+    padding-top: 48px;
+    padding-bottom: 80px;
+    max-width: 860px;
+  }
+
+  .tradein-header {
+    margin-bottom: 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .page-title {
+    font-size: clamp(34px, 5.5vw, 52px);
+  }
+
+  .page-subtitle {
+    font-size: 18px;
+    color: var(--text-muted);
+    max-width: 680px;
+    line-height: 1.5;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  /* Perks */
+  .perks-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+
+  .perk-card {
+    padding: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: #FAF8F5;
+  }
+
+  .perk-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    background: var(--accent-light);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+
+  .perk-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .perk-title {
+    font-size: 15px;
+    color: var(--text-main);
+  }
+
+  .perk-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.45;
+  }
+
+  /* Form Container */
+  .form-container {
+    background: #FFFFFF;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+  }
+
+  @media (max-width: 640px) {
+    .form-container {
+      padding: 24px 18px;
+    }
+  }
+
+  .form-section-title {
+    font-size: 24px;
+    margin-bottom: 16px;
+    color: var(--text-main);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  @media (min-width: 600px) {
+    .form-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .form-action-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    margin-top: 36px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .direct-text-link {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .direct-text-link:hover {
+    text-decoration: underline;
+  }
+
+  .trade-success {
+    margin-top: 24px;
+    background: var(--accent-light);
+    border-radius: var(--radius-sm);
+    padding: 24px;
+    text-align: center;
+  }
+
+  .success-icon {
+    font-size: 32px;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .success-title {
+    font-size: 28px;
+    color: var(--accent);
+  }
+
+  .success-text {
+    font-size: 15px;
+    color: #2D3748;
+    line-height: 1.5;
+    margin-top: 6px;
+  }
+</style>
